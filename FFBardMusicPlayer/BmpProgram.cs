@@ -27,13 +27,10 @@ namespace FFBardMusicPlayer {
             string titleVersion = "BardMusicPlayer 1.5.2 - BoL Version";
             string messageText = "      This is an unsupported version of BardMusicPlayer";
 
-			//Sharlayan.Reader.memoryVersion = 55;
-
 			Application.EnableVisualStyles();
 
 			CultureInfo nonInvariantCulture = new CultureInfo("en-US");
 			Thread.CurrentThread.CurrentCulture = nonInvariantCulture;
-			//Application.CurrentInputLanguage = InputLanguage.FromCulture(new CultureInfo("en"));
 
 			if(GetConsoleWindow() != IntPtr.Zero) {
 				Console.OutputEncoding = System.Text.Encoding.UTF8;
@@ -49,7 +46,6 @@ namespace FFBardMusicPlayer {
 
 			BmpSeer.Instance.Stop();
 			BmpSeer.Instance.DestroyFirewall("BardMusicPlayer");
-
 		}
 	}
 }
