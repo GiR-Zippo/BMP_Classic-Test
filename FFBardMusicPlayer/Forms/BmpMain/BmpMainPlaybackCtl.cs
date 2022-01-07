@@ -19,11 +19,7 @@ namespace FFBardMusicPlayer.Forms
 		{
 			if (!playing)
 			{
-				if (tempPlaying)
-				{
-					ChatLogAll.AppendRtf(BmpChatParser.FormatRtf("Playback paused."));
-					tempPlaying = false;
-				}
+				ChatLogAll.AppendRtf(BmpChatParser.FormatRtf("Playback paused."));
 				if (LocalOrchestra.OrchestraEnabled)
 					LocalOrchestra.PerformerPlay(false);
 
@@ -31,11 +27,7 @@ namespace FFBardMusicPlayer.Forms
 			}
 			else
 			{
-				if (!tempPlaying)
-				{
-					ChatLogAll.AppendRtf(BmpChatParser.FormatRtf("Playback resumed."));
-					tempPlaying = true;
-				}
+				ChatLogAll.AppendRtf(BmpChatParser.FormatRtf("Playback resumed."));
 				if (LocalOrchestra.OrchestraEnabled)
 					LocalOrchestra.PerformerPlay(true);
 

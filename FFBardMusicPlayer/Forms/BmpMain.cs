@@ -30,7 +30,6 @@ namespace FFBardMusicPlayer.Forms {
 		private string updateText = string.Empty;
 
 		private bool proceedPlaylistMidi = false;
-		bool tempPlaying = false;
 
 		public bool DonationStatus {
 			set {
