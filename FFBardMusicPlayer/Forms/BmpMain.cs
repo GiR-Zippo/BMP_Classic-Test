@@ -227,7 +227,7 @@ namespace FFBardMusicPlayer.Forms {
 			Log("Bard Music Player initialized.");
 		}
 
-        private void Instance_InstrumentHeldChanged(BardMusicPlayer.Seer.Events.InstrumentHeldChanged seerEvent)
+		private void Instance_InstrumentHeldChanged(BardMusicPlayer.Seer.Events.InstrumentHeldChanged seerEvent)
         {
 			if (LocalOrchestra.OrchestraEnabled)
 			{

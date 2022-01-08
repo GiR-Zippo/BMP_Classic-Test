@@ -79,7 +79,7 @@
 			// ChatPlaylistTable
 			// 
 			this.ChatPlaylistTable.ColumnCount = 3;
-			this.ChatPlaylistTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.ChatPlaylistTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55F));
 			this.ChatPlaylistTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.ChatPlaylistTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.ChatPlaylistTable.Controls.Add(this.Playlist, 0, 0);
@@ -315,7 +315,6 @@
 			this.ResumeLayout(false);
 
 		}
-
         #endregion
         private System.Windows.Forms.TableLayoutPanel MainTable;
 		private System.Windows.Forms.TableLayoutPanel ChatPlaylistTable;
