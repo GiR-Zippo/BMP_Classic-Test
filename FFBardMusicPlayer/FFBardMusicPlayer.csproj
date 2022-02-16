@@ -7,13 +7,13 @@
     <AssemblyTitle>FFBardMusicPlayerInternal</AssemblyTitle>
     <Product>Bard Music Player</Product>
     <Copyright>Copyright © MoogleTroupe 2021</Copyright>
-    <AssemblyVersion>1.5.2</AssemblyVersion>
-    <FileVersion>1.5.2</FileVersion>
+    <AssemblyVersion>1.5.3</AssemblyVersion>
+    <FileVersion>1.5.3</FileVersion>
     <PlatformTarget>x64</PlatformTarget>
     <LangVersion>9.0</LangVersion>
-    <Version>1.5.2</Version>
+    <Version>1.5.3</Version>
     <Configurations>Debug;Release;Publish</Configurations>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <ApplicationIcon>Resources\iconp.ico</ApplicationIcon>
     <Description>BMP BoL Version</Description>
     <ApplicationManifest>app.manifest</ApplicationManifest>
