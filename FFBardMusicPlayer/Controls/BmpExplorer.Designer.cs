@@ -105,6 +105,7 @@
             this.OpenSong.TabStop = false;
             this.OpenSong.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.OpenSong.UseVisualStyleBackColor = true;
+            this.OpenSong.Visible = false;
             // 
             // SelectorSong
             // 
