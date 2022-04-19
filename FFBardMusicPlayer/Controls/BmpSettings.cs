@@ -190,27 +190,6 @@ namespace FFBardMusicPlayer.Controls {
 		{
 			BmpPigeonhole.Instance.AutostartMethod = AutostartMethod.SelectedIndex;
 		}
-
-		private void g_Overdriven_Click(object sender, EventArgs e)
-        {
-			OnGuitarKeybind?.Invoke(this, 29);
-		}
-        private void g_Clean_Click(object sender, EventArgs e)
-        {
-			OnGuitarKeybind?.Invoke(this, 27);
-		}
-        private void g_Muted_Click(object sender, EventArgs e)
-        {
-			OnGuitarKeybind?.Invoke(this, 28);
-		}
-        private void g_PowerChords_Click(object sender, EventArgs e)
-        {
-			OnGuitarKeybind?.Invoke(this, 30);
-		}
-        private void g_Special_Click(object sender, EventArgs e)
-        {
-			OnGuitarKeybind?.Invoke(this, 31);
-		}
     }
 
     public class MidiInput {

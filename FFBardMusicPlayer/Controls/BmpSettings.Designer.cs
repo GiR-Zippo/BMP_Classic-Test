@@ -30,11 +30,6 @@
             this.SettingsScrollPanel = new System.Windows.Forms.Panel();
             this.SettingsTable = new System.Windows.Forms.TableLayoutPanel();
             this.guitarkeygroup = new System.Windows.Forms.GroupBox();
-            this.g_Overdriven = new System.Windows.Forms.Button();
-            this.g_Special = new System.Windows.Forms.Button();
-            this.g_Clean = new System.Windows.Forms.Button();
-            this.g_PowerChords = new System.Windows.Forms.Button();
-            this.g_Muted = new System.Windows.Forms.Button();
             this.ChatSettings = new System.Windows.Forms.GroupBox();
             this.SettingBringGame = new System.Windows.Forms.CheckBox();
             this.UnequipPause = new System.Windows.Forms.CheckBox();
@@ -132,11 +127,6 @@
             // 
             // guitarkeygroup
             // 
-            this.guitarkeygroup.Controls.Add(this.g_Overdriven);
-            this.guitarkeygroup.Controls.Add(this.g_Special);
-            this.guitarkeygroup.Controls.Add(this.g_Clean);
-            this.guitarkeygroup.Controls.Add(this.g_PowerChords);
-            this.guitarkeygroup.Controls.Add(this.g_Muted);
             this.guitarkeygroup.Dock = System.Windows.Forms.DockStyle.Fill;
             this.guitarkeygroup.Location = new System.Drawing.Point(260, 100);
             this.guitarkeygroup.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
@@ -145,57 +135,7 @@
             this.guitarkeygroup.Size = new System.Drawing.Size(258, 152);
             this.guitarkeygroup.TabIndex = 26;
             this.guitarkeygroup.TabStop = false;
-            this.guitarkeygroup.Text = "Guitar Keybinds";
-            // 
-            // g_Overdriven
-            // 
-            this.g_Overdriven.Location = new System.Drawing.Point(31, 18);
-            this.g_Overdriven.Name = "g_Overdriven";
-            this.g_Overdriven.Size = new System.Drawing.Size(75, 23);
-            this.g_Overdriven.TabIndex = 21;
-            this.g_Overdriven.Text = "Overdriven";
-            this.g_Overdriven.UseVisualStyleBackColor = true;
-            this.g_Overdriven.Click += new System.EventHandler(this.g_Overdriven_Click);
-            // 
-            // g_Special
-            // 
-            this.g_Special.Location = new System.Drawing.Point(31, 109);
-            this.g_Special.Name = "g_Special";
-            this.g_Special.Size = new System.Drawing.Size(75, 23);
-            this.g_Special.TabIndex = 25;
-            this.g_Special.Text = "Special";
-            this.g_Special.UseVisualStyleBackColor = true;
-            this.g_Special.Click += new System.EventHandler(this.g_Special_Click);
-            // 
-            // g_Clean
-            // 
-            this.g_Clean.Location = new System.Drawing.Point(31, 41);
-            this.g_Clean.Name = "g_Clean";
-            this.g_Clean.Size = new System.Drawing.Size(75, 23);
-            this.g_Clean.TabIndex = 22;
-            this.g_Clean.Text = "Clean";
-            this.g_Clean.UseVisualStyleBackColor = true;
-            this.g_Clean.Click += new System.EventHandler(this.g_Clean_Click);
-            // 
-            // g_PowerChords
-            // 
-            this.g_PowerChords.Location = new System.Drawing.Point(31, 84);
-            this.g_PowerChords.Name = "g_PowerChords";
-            this.g_PowerChords.Size = new System.Drawing.Size(75, 23);
-            this.g_PowerChords.TabIndex = 24;
-            this.g_PowerChords.Text = "PowerChords";
-            this.g_PowerChords.UseVisualStyleBackColor = true;
-            this.g_PowerChords.Click += new System.EventHandler(this.g_PowerChords_Click);
-            // 
-            // g_Muted
-            // 
-            this.g_Muted.Location = new System.Drawing.Point(31, 64);
-            this.g_Muted.Name = "g_Muted";
-            this.g_Muted.Size = new System.Drawing.Size(75, 23);
-            this.g_Muted.TabIndex = 23;
-            this.g_Muted.Text = "Muted";
-            this.g_Muted.UseVisualStyleBackColor = true;
-            this.g_Muted.Click += new System.EventHandler(this.g_Muted_Click);
+            this.guitarkeygroup.Text = "Huh, nothing here?";
             // 
             // ChatSettings
             // 
@@ -446,11 +386,6 @@
 		private System.Windows.Forms.TableLayoutPanel SettingsTable;
 		private System.Windows.Forms.CheckBox UnequipPause;
 		private System.Windows.Forms.CheckBox verboseToggle;
-        private System.Windows.Forms.Button g_Overdriven;
-        private System.Windows.Forms.Button g_Clean;
-        private System.Windows.Forms.Button g_Muted;
-        private System.Windows.Forms.Button g_PowerChords;
-        private System.Windows.Forms.Button g_Special;
         private System.Windows.Forms.GroupBox guitarkeygroup;
         private System.Windows.Forms.GroupBox MiscSettings;
         private System.Windows.Forms.Label label1;

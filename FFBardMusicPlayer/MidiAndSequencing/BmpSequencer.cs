@@ -255,23 +255,33 @@ namespace FFBardMusicPlayer {
 		public string ProgramToInstrumentName(int prog) {
 			switch (prog) {
 				case 0: { return "Piano"; }
-				case 46: { return "Harp"; }
-				case 24: { return "Lute"; }
-				case 68: { return "Oboe"; }
-				case 71: { return "Clarinet"; }
-				case 75: { return "Panpipes"; }
-				case 72: { return "Fife"; }
-				case 47: { return "Timpani"; }
-
-				// Drums
-				//case 59: { }
-				//case 35: { }
-				//Guitar
+				case 25: { return "Lute"; }
 				case 27: { return "ElectricGuitarClean"; }
 				case 28: { return "ElectricGuitarMuted"; }
 				case 29: { return "ElectricGuitarOverdriven"; }
 				case 30: { return "ElectricGuitarPowerChords"; }
 				case 31: { return "ElectricGuitarSpecial"; }
+				case 40: { return "Violin"; }
+				case 41: { return "Viola"; }
+				case 42: { return "Cello"; }
+				case 43: { return "Doublebass"; }
+				case 45: { return "Fiddle"; }
+				case 46: { return "Harp"; }
+				case 47: { return "Timpani"; }
+				case 56: { return "Trumpet"; }
+				case 57: { return "Trombone"; }
+				case 58: { return "Tuba"; }
+				case 60: { return "Horn"; }
+				case 65: { return "Saxophone"; }
+				case 68: { return "Oboe"; }
+				case 71: { return "Clarinet"; }
+				case 72: { return "Fife"; }
+				case 73: { return "Flute"; }
+				case 75: { return "Panpipes"; }
+				case 96: { return "Bongo"; }
+				case 97: { return "Bassdrum"; }
+				case 98: { return "Snaredrum"; }
+				case 99: { return "Cymbal"; }
 			}
 			return string.Empty;
 		}

@@ -165,20 +165,6 @@ namespace FFBardMusicPlayer.Forms {
                });
             };
 
-			Settings.OnGuitarKeybind += delegate (object o, int key)
-			{
-				this.Invoke(t => {
-					if (!BmpGlobals.CurrentGame.ChatStatus)
-					{
-						if (FFXIV.hotkeys.GetKeybindFromVoiceByte(key) is FFXIVKeybindDat.Keybind keybind)
-						{
-							FFXIV.hook.SendKeybindDown(keybind);
-							FFXIV.hook.SendKeybindUp(keybind);
-						}
-					}
-				});
-			};
-
 			Explorer.OnBrowserVisibleChange += delegate (object o, bool visible) {
 				MainTable.SuspendLayout();
 				MainTable.RowStyles[MainTable.GetRow(ChatPlaylistTable)].Height = visible ? 0 : 100;
