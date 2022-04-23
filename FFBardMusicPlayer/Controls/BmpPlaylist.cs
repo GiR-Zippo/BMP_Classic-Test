@@ -105,6 +105,7 @@ namespace FFBardMusicPlayer.Controls {
 		public void Deselect() {
 			PlaylistView.ClearSelection();
 		}
+
 		public void Select(string filePath) {
 			for(int i = 0; i < PlaylistView.Rows.Count; i++) {
 				BmpMidiEntry entry = PlaylistView.Rows[i].DataBoundItem as BmpMidiEntry;
@@ -295,7 +296,6 @@ namespace FFBardMusicPlayer.Controls {
 		}
 
 		// Helpers
-
 		private bool GetSelectedMidiEntry(out BmpMidiEntry entry) {
 			if(PlaylistView.SelectedRows.Count == 1) {
 				entry = PlaylistView.SelectedRows[0].DataBoundItem as BmpMidiEntry;
@@ -305,8 +305,7 @@ namespace FFBardMusicPlayer.Controls {
 			return false;
 		}
 
-        // // Drag and Drop and/or Reorder
-
+        // Drag and Drop and/or Reorder
         private bool actuallyMoving = false;
         private int mouseYCoordForMovement = -1;
         private int initialRowIndexForMovement = -1;
@@ -361,6 +360,7 @@ namespace FFBardMusicPlayer.Controls {
 			playlistDelay = Decimal.ToSingle(Playlist_Delay.Value);
 			BmpPigeonhole.Instance.PlaylistDelay = playlistDelay;
 		}
+
 		private void BmpMidiEntryList_DragDrop(object sender, DragEventArgs e)
         {
             Point clientPoint = this.PointToClient(new Point(e.X, e.Y));
@@ -416,6 +416,7 @@ namespace FFBardMusicPlayer.Controls {
                 RemovePlaylistEntry(0);
             }
 		}
+
 		private void Playlist_Load_Click(object sender, EventArgs e)
 		{
 			if (PlaylistView.RowCount != 0)
@@ -443,8 +444,7 @@ namespace FFBardMusicPlayer.Controls {
 					sr.Close();
 				}
            }
-       }
-
+        }
 
 		private void Playlist_Save_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
 		{
