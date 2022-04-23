@@ -219,8 +219,10 @@ namespace FFBardMusicPlayer
                     Debug.WriteLine("step 4: " + noteVelocity + ": " + watch.ElapsedMilliseconds);
                     watch = Stopwatch.StartNew();
 
+#region Tracknaming and octave shifting
                     int octaveShift = 0;
                     string trackName = originalChunk.Events.OfType<SequenceTrackNameEvent>().FirstOrDefault()?.Text;
+
                     if (trackName == null) trackName = "";
                     trackName = trackName.ToLower().Trim().Replace(" ", String.Empty);
                     string o_trackName = trackName;
@@ -238,7 +240,8 @@ namespace FFBardMusicPlayer
                                 trackName = trackName + "+" + octaveShift;
                             else if (octaveShift < 0)
                                 trackName = trackName + octaveShift;
-                            Debug.WriteLine(trackName);
+
+                            //fallback to the old routine
                             if (trackName.Equals("Unknown") || trackName.Equals("None"))
                             {
                                 bool success;
@@ -246,11 +249,20 @@ namespace FFBardMusicPlayer
                                 (success, parsedTrackName) = TrackNameToStringInstrumentName(o_trackName);
                                 if (success)
                                     trackName = parsedTrackName;
-
                             }
                         }
+
+                        //last try with the program number
+                        if ((string.IsNullOrEmpty(match.Groups[1].Value)) || trackName.Equals("Unknown") || trackName.Equals("None"))
+                        {
+                            ProgramChangeEvent prog = originalChunk.Events.OfType<ProgramChangeEvent>().FirstOrDefault();
+                            if (prog != null)
+                                trackName = Instrument.ParseByProgramChange(prog.ProgramNumber).Name;
+                        }
+
                     }
                     newChunk = new TrackChunk(new SequenceTrackNameEvent(trackName));
+#endregion Tracknaming and octave shifting
 
                     //Create Progchange Event
                     foreach (var timedEvent in originalChunk.GetTimedEvents())
@@ -291,7 +303,7 @@ namespace FFBardMusicPlayer
 
                 tempoMap = newMidiFile.GetTempoMap();
                 long delta = newMidiFile.GetTrackChunks().GetNotes().First().GetTimedNoteOnEvent().TimeAs<MetricTimeSpan>(tempoMap).TotalMicroseconds / 1000;
-                foreach (TrackChunk chunk in newMidiFile.GetTrackChunks())
+                Parallel.ForEach(newMidiFile.GetTrackChunks(), chunk =>
                 {
                     using (var notesManager = chunk.ManageNotes())
                     {
@@ -316,7 +328,7 @@ namespace FFBardMusicPlayer
                                 _event.Time = newStart;
                         }
                     }
-                }
+                });
 
                 var stream = new MemoryStream();
                 
@@ -447,74 +459,6 @@ namespace FFBardMusicPlayer
 
                 default: return (false, trackName);
             }
-        }
-
-        private static (bool, string) ProgramToStringInstrumentName(SevenBitNumber prog)
-        {
-            if (prog.Equals(null)) return (false, null);
-            switch (prog)
-            {
-                case 46: return (true, "Harp");
-
-                case 0:
-                case 1: return (true, "Piano");
-
-                case 24: return (true, "Lute");
-
-                case 6:
-                case 35:
-                case 45: return (true, "Fiddle");
-
-                case 73: return (true, "Flute");
-
-                case 68: return (true, "Oboe");
-
-                case 71: return (true, "Clarinet");
-
-                case 72:
-                case 79: return (true, "Fife");
-
-                case 75: return (true, "Panpipes");
-
-                case 47: return (true, "Timpani");
-
-                //
-                //
-                //
-                //
-
-                case 56:
-                case 59: return (true, "Trumpet");
-
-                case 57: return (true, "Trombone");
-
-                case 58: return (true, "Tuba");
-
-                case 60:
-                case 61:
-                case 62:
-                case 63: return (true, "Horn");
-
-                case 64:
-                case 65:
-                case 66:
-                case 67: return (true, "Saxophone");
-
-                case 40: return (true, "Violin");
-
-                case 41: return (true, "Viola");
-
-                case 42: return (true, "Cello");
-
-                case 43: return (true, "DoubleBass");
-
-                case 27: return (true, "ElectricGuitarClean");
-                case 28: return (true, "ElectricGuitarMuted");
-                case 29: return (true, "ElectricGuitarOverdriven");
-                case 30: return (true, "ElectricGuitarPowerChords");
-                case 31: return (true, "ElectricGuitarSpecial");
-            }
-            return (true, null);
         }
     }
 }
