@@ -62,6 +62,10 @@ namespace FFBardMusicCommon {
 			get { return midiFilePath; }
 		}
 
+		public string MidiFilePath {
+			get { return midiFilePath.FilePath; }
+		}
+
 		private BmpMidiEntryTrack midiTrack = new BmpMidiEntryTrack();
 		public BmpMidiEntryTrack Track {
 			get { return midiTrack; }
@@ -134,7 +138,7 @@ namespace FFBardMusicCommon {
 		{
 			BmpPigeonhole.Instance.PlaylistEntries = new List<KeyValuePair<string, int>>();
 			foreach (BmpMidiEntry songs in m)
-				BmpPigeonhole.Instance.PlaylistEntries.Add(new KeyValuePair<string, int>(songs.FilePath.ToString(), songs.Track.Track));
+				BmpPigeonhole.Instance.PlaylistEntries.Add(new KeyValuePair<string, int>(songs.MidiFilePath, songs.Track.Track));
 		}
 	}
 }

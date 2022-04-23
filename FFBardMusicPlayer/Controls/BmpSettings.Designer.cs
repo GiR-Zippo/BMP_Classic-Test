@@ -29,7 +29,8 @@
             this.SignatureFolder = new System.Windows.Forms.Button();
             this.SettingsScrollPanel = new System.Windows.Forms.Panel();
             this.SettingsTable = new System.Windows.Forms.TableLayoutPanel();
-            this.guitarkeygroup = new System.Windows.Forms.GroupBox();
+            this.ThanksTable = new System.Windows.Forms.GroupBox();
+            this.StaffNames = new System.Windows.Forms.TextBox();
             this.ChatSettings = new System.Windows.Forms.GroupBox();
             this.SettingBringGame = new System.Windows.Forms.CheckBox();
             this.UnequipPause = new System.Windows.Forms.CheckBox();
@@ -49,7 +50,7 @@
             this.GeneralSettings.SuspendLayout();
             this.SettingsScrollPanel.SuspendLayout();
             this.SettingsTable.SuspendLayout();
-            this.guitarkeygroup.SuspendLayout();
+            this.ThanksTable.SuspendLayout();
             this.ChatSettings.SuspendLayout();
             this.PlaybackSettings.SuspendLayout();
             this.MiscSettings.SuspendLayout();
@@ -112,7 +113,7 @@
             this.SettingsTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.SettingsTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.SettingsTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.SettingsTable.Controls.Add(this.guitarkeygroup, 1, 1);
+            this.SettingsTable.Controls.Add(this.ThanksTable, 1, 1);
             this.SettingsTable.Controls.Add(this.ChatSettings, 0, 0);
             this.SettingsTable.Controls.Add(this.PlaybackSettings, 1, 0);
             this.SettingsTable.Controls.Add(this.MiscSettings, 0, 1);
@@ -125,17 +126,31 @@
             this.SettingsTable.Size = new System.Drawing.Size(518, 252);
             this.SettingsTable.TabIndex = 18;
             // 
-            // guitarkeygroup
+            // ThanksTable
             // 
-            this.guitarkeygroup.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.guitarkeygroup.Location = new System.Drawing.Point(260, 100);
-            this.guitarkeygroup.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
-            this.guitarkeygroup.Name = "guitarkeygroup";
-            this.guitarkeygroup.Padding = new System.Windows.Forms.Padding(0);
-            this.guitarkeygroup.Size = new System.Drawing.Size(258, 152);
-            this.guitarkeygroup.TabIndex = 26;
-            this.guitarkeygroup.TabStop = false;
-            this.guitarkeygroup.Text = "Huh, nothing here?";
+            this.ThanksTable.Controls.Add(this.StaffNames);
+            this.ThanksTable.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ThanksTable.Location = new System.Drawing.Point(260, 100);
+            this.ThanksTable.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
+            this.ThanksTable.Name = "ThanksTable";
+            this.ThanksTable.Padding = new System.Windows.Forms.Padding(0);
+            this.ThanksTable.Size = new System.Drawing.Size(258, 152);
+            this.ThanksTable.TabIndex = 26;
+            this.ThanksTable.TabStop = false;
+            this.ThanksTable.Text = "Huh, nothing here?";
+            //
+            // StaffNames
+            //
+            this.StaffNames.Name = "StaffNames";
+            this.StaffNames.Location = new System.Drawing.Point(5, 18);
+            this.StaffNames.Size = new System.Drawing.Size(290, 120);
+            this.StaffNames.Multiline = true;
+            this.StaffNames.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.StaffNames.ReadOnly = true;
+            this.StaffNames.Text = "Big thank you to all members of the Bards of Light!\r\n\r\n" +
+                                   "Thanks to the founders of this adventure,\r\n" +
+                                   "to all of the former members of this band\r\n" +
+                                   "and in honour of those whom we lost along the way.\r\n";
             // 
             // ChatSettings
             // 
@@ -355,7 +370,7 @@
             this.GeneralSettings.ResumeLayout(false);
             this.SettingsScrollPanel.ResumeLayout(false);
             this.SettingsTable.ResumeLayout(false);
-            this.guitarkeygroup.ResumeLayout(false);
+            this.ThanksTable.ResumeLayout(false);
             this.ChatSettings.ResumeLayout(false);
             this.ChatSettings.PerformLayout();
             this.PlaybackSettings.ResumeLayout(false);
@@ -386,7 +401,8 @@
 		private System.Windows.Forms.TableLayoutPanel SettingsTable;
 		private System.Windows.Forms.CheckBox UnequipPause;
 		private System.Windows.Forms.CheckBox verboseToggle;
-        private System.Windows.Forms.GroupBox guitarkeygroup;
+        private System.Windows.Forms.GroupBox ThanksTable;
+        private System.Windows.Forms.TextBox StaffNames;
         private System.Windows.Forms.GroupBox MiscSettings;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox AutostartMethod;
