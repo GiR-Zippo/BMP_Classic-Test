@@ -240,16 +240,6 @@ namespace FFBardMusicPlayer
                                 trackName = trackName + "+" + octaveShift;
                             else if (octaveShift < 0)
                                 trackName = trackName + octaveShift;
-
-                            //fallback to the old routine
-                            if (trackName.Equals("Unknown") || trackName.Equals("None"))
-                            {
-                                bool success;
-                                string parsedTrackName;
-                                (success, parsedTrackName) = TrackNameToStringInstrumentName(o_trackName);
-                                if (success)
-                                    trackName = parsedTrackName;
-                            }
                         }
 
                         //last try with the program number
@@ -363,101 +353,6 @@ namespace FFBardMusicPlayer
                     var hash = md5.ComputeHash(stream);
                     return BitConverter.ToString(hash).Replace("-", String.Empty).ToLowerInvariant();
                 }
-            }
-        }
-
-        private static (bool, string) TrackNameToStringInstrumentName(string trackName)
-        {
-            if (string.IsNullOrEmpty(trackName)) return (false, trackName);
-            switch (trackName)
-            {
-                case "harp":
-                case "orchestralharp":
-                case "orchestralharps":
-                case "harps": return (true, "Harp");
-                case "piano":
-                case "acousticgrandpiano":
-                case "acousticgrandpianos":
-                case "pianos": return (true, "Piano");
-                case "lute":
-                case "guitar":
-                case "guitars":
-                case "lutes": return (true, "Lute");
-                case "fiddle":
-                case "pizzicatostrings":
-                case "pizzicatostring":
-                case "fiddles": return (true, "Fiddle");
-                case "flute":
-                case "flutes": return (true, "Flute");
-                case "oboe":
-                case "oboes": return (true, "Oboe");
-                case "clarinet":
-                case "clarinets": return (true, "Clarinet");
-                case "fife":
-                case "piccolo":
-                case "piccolos":
-                case "fifes":
-                case "ocarina":
-                case "ocarinas": return (true, "Fife");
-                case "panpipes":
-                case "panflute":
-                case "panflutes":
-                case "panpipe": return (true, "Panpipes");
-                case "timpani":
-                case "timpanis": return (true, "Timpani");
-                case "bongos":
-                case "bongo": return (true, "Bongo");
-                case "bass_drum":
-                case "bass_drums":
-                case "bassdrum":
-                case "bassdrums": return (true, "BassDrum");
-                case "snaredrum":
-                case "snare_drum":
-                case "snare_drums":
-                case "snare":
-                case "snares": return (true, "SnareDrum");
-                case "cymbal":
-                case "cymbals": return (true, "Cymbal");
-                case "trumpet":
-                case "trumpets": return (true, "Trumpet");
-                case "trombone":
-                case "trombones": return (true, "Trombone");
-                case "tuba":
-                case "tubas": return (true, "Tuba");
-                case "horn":
-                case "frenchhorn":
-                case "frenchhorns":
-                case "horns": return (true, "Horn");
-                case "saxophone":
-                case "sax":
-                case "altosax":
-                case "altosaxophone":
-                case "saxophones": return (true, "Saxophone");
-                case "violin":
-                case "violins": return (true, "Violin");
-                case "viola":
-                case "violas": return (true, "Viola");
-                case "cello":
-                case "cellos": return (true, "Cello");
-                case "bass":
-                case "doublebass":
-                case "double_bass":
-                case "contrabass": return (true, "DoubleBass");
-                case "guitaroverdriven":
-                case "overdrivenguitar":
-                case "electricguitaroverdriven": return (true, "ElectricGuitarOverdriven");
-                case "guitarclean":
-                case "cleanguitar":
-                case "electricguitarclean": return (true, "ElectricGuitarClean");
-                case "guitarmuted":
-                case "mutedguitar":
-                case "electricguitarmuted": return (true, "ElectricGuitarMuted");
-                case "guitarpowerchords":
-                case "electricguitarpowerchords": return (true, "ElectricGuitarPowerChords");
-                case "guitarspecial":
-                case "electricguitarspecial": return (true, "ElectricGuitarSpecial");
-
-                default: return (false, trackName);
             }
         }
     }
