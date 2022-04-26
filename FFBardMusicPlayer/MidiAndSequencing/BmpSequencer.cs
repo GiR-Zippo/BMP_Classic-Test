@@ -10,12 +10,6 @@ using System.Text.RegularExpressions;
 using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Pigeonhole;
 
-/*
-public class TickList : Dictionary<int, List<MetaMidiEvent>> {
-
-}
-*/
-
 namespace FFBardMusicPlayer {
 	public class BmpSequencer : BmpCustomSequencer {
 
@@ -70,7 +64,6 @@ namespace FFBardMusicPlayer {
 				float ms = GetTimeFromTick(CurrentTick);
 				TimeSpan t = TimeSpan.FromMilliseconds(ms);
 				return string.Format("{0:D2}:{1:D2}", (int) t.TotalMinutes, t.Seconds);
-				//return string.Format("{0}", CurrentTick);
 			}
 		}
 		public string MaxTime {
@@ -78,7 +71,6 @@ namespace FFBardMusicPlayer {
 				float ms = GetTimeFromTick(MaxTick - 1);
 				TimeSpan t = TimeSpan.FromMilliseconds(ms);
 				return string.Format("{0:D2}:{1:D2}", (int) t.TotalMinutes, t.Seconds);
-				//return string.Format("{0}", MaxTick);
 			}
 		}
 		int loadedTrack = 0;
