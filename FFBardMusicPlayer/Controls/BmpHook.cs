@@ -159,8 +159,6 @@ namespace FFBardMusicPlayer.Controls {
 		}
 
 		public void SetupMemory(Process proc) {
-
-
 			if(memory.IsAttached()) {
 				memory.UnsetProcess();
 			}

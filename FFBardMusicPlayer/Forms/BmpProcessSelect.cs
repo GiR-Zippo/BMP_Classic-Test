@@ -105,7 +105,6 @@ namespace FFBardMusicPlayer {
 			else if (BmpSeer.Instance.Games.Count == 1 && !hasAutoSelected)
 			{
 				DialogResult = DialogResult.Yes;
-				//_ = WaitForPerformer(BmpSeer.Instance.Games.First().Value);
 				selectedGame = BmpSeer.Instance.Games.First().Value;
 				OnSelectGame?.Invoke(this, BmpSeer.Instance.Games.First().Value);
 				hasAutoSelected = true;

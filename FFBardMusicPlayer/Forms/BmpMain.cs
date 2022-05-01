@@ -254,6 +254,17 @@ namespace FFBardMusicPlayer.Forms {
 				if(game != null)
 				{
 					BmpGlobals.CurrentGame = game;
+
+					//Wait a sec until Seer has the char ID
+					int rounds = 100;
+					while (game.ConfigId.Length <= 0)
+					{
+						Thread.Sleep(10);
+						if (rounds == 0)
+							break;
+						rounds--;
+                    }
+
 					FFXIV.SetProcess(game);
 					if(processSelector.useLocalOrchestra) {
 						InfoTabs.TabPages.Remove(localOrchestraTab);
@@ -335,9 +346,7 @@ namespace FFBardMusicPlayer.Forms {
 
 		protected override void OnShown(EventArgs e) {
 			base.OnShown(e);
-
 			this.FindProcess();
-
 
 			string ll = BmpPigeonhole.Instance.LastLoaded;
 			if(!string.IsNullOrEmpty(ll)) {
