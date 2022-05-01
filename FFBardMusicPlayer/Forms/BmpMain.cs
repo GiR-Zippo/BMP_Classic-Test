@@ -15,7 +15,6 @@ using System.Security.Principal;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Seer;
 using BardMusicPlayer.Quotidian.Structs;
-using System.Threading.Tasks;
 using System.Diagnostics;
 
 namespace FFBardMusicPlayer.Forms {
@@ -244,7 +243,6 @@ namespace FFBardMusicPlayer.Forms {
             FFXIV.SetErrorStatus("[ERROR] " + format);
         }
 
-//TODO
         public void FindProcess()
 		{
 			processSelector.ShowDialog(this);
