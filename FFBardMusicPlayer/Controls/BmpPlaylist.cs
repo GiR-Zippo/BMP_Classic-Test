@@ -334,7 +334,8 @@ namespace FFBardMusicPlayer.Controls {
                         actuallyMoving = true;
 
                         Console.WriteLine("initialRow detected as {0}", initialRowIndexForMovement);
-
+						if (initialRowIndexForMovement == -1)
+							return;
                         BmpMidiEntry data = PlaylistView.Rows[initialRowIndexForMovement].DataBoundItem as BmpMidiEntry;
                         this.DoDragDrop(data, DragDropEffects.Move);
                     }

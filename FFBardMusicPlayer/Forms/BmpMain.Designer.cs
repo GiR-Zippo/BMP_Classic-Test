@@ -33,6 +33,7 @@
 			this.localOrchestraTab = new System.Windows.Forms.TabPage();
 			this.SettingsTab = new System.Windows.Forms.TabPage();
 			this.StatisticTab = new System.Windows.Forms.TabPage();
+			this.SongPreviewTab = new System.Windows.Forms.TabPage();
 			this.BottomTable = new System.Windows.Forms.TableLayoutPanel();
 			this.DonationButton = new System.Windows.Forms.Button();
 			this.Playlist = new FFBardMusicPlayer.Controls.BmpPlaylist();
@@ -41,6 +42,7 @@
 			this.LocalOrchestra = new FFBardMusicPlayer.Controls.BmpLocalOrchestra();
 			this.Settings = new FFBardMusicPlayer.Controls.BmpSettings();
 			this.Statistics = new FFBardMusicPlayer.Controls.BmpStatistics();
+			this.SongPreview = new FFBardMusicPlayer.Controls.BmpSongPreview();
 			this.Explorer = new FFBardMusicPlayer.Controls.BmpExplorer();
 			this.Player = new FFBardMusicPlayer.Controls.BmpPlayer();
 			this.FFXIV = new FFBardMusicPlayer.Controls.BmpHook();
@@ -52,6 +54,7 @@
 			this.localOrchestraTab.SuspendLayout();
 			this.SettingsTab.SuspendLayout();
 			this.StatisticTab.SuspendLayout();
+			this.SongPreviewTab.SuspendLayout();
 			this.BottomTable.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -101,6 +104,7 @@
 			this.InfoTabs.Controls.Add(this.localOrchestraTab);
 			this.InfoTabs.Controls.Add(this.SettingsTab);
 			this.InfoTabs.Controls.Add(this.StatisticTab);
+			this.InfoTabs.Controls.Add(this.SongPreviewTab);
 			this.InfoTabs.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.InfoTabs.Location = new System.Drawing.Point(200, 0);
 			this.InfoTabs.Margin = new System.Windows.Forms.Padding(0);
@@ -160,6 +164,17 @@
 			this.StatisticTab.TabIndex = 3;
 			this.StatisticTab.Text = "Statistics";
 			this.StatisticTab.UseVisualStyleBackColor = true;
+			// 
+			// SongPreviewTab
+			// 
+			this.SongPreviewTab.Controls.Add(this.SongPreview);
+			this.SongPreviewTab.Location = new System.Drawing.Point(4, 22);
+			this.SongPreviewTab.Name = "SongPreviewTab";
+			this.SongPreviewTab.Padding = new System.Windows.Forms.Padding(3);
+			this.SongPreviewTab.Size = new System.Drawing.Size(376, 161);
+			this.SongPreviewTab.TabIndex = 3;
+			this.SongPreviewTab.Text = "Song Preview";
+			this.SongPreviewTab.UseVisualStyleBackColor = true;
 			// 
 			// BottomTable
 			// 
@@ -258,6 +273,14 @@
 			this.Statistics.Size = new System.Drawing.Size(370, 155);
 			this.Statistics.TabIndex = 0;
 			// 
+			// SongPreview
+			// 
+			this.SongPreview.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.SongPreview.Location = new System.Drawing.Point(3, 3);
+			this.SongPreview.Name = "SongPreview";
+			this.SongPreview.Size = new System.Drawing.Size(370, 155);
+			this.SongPreview.TabIndex = 0;
+			// 
 			// Explorer
 			// 
 			this.Explorer.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -330,6 +353,8 @@
 		private Controls.BmpExplorer Explorer;
 		private System.Windows.Forms.TabPage StatisticTab;
 		private Controls.BmpStatistics Statistics;
+		private System.Windows.Forms.TabPage SongPreviewTab;
+		private Controls.BmpSongPreview SongPreview;
 		private System.Windows.Forms.TabPage localOrchestraTab;
 		private Controls.BmpLocalOrchestra LocalOrchestra;
 		private Controls.BmpHook FFXIV;

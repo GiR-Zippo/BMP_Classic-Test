@@ -83,6 +83,8 @@
     <ProjectReference Include="..\BardMusicPlayer\BardMusicPlayer.Pigeonhole\BardMusicPlayer.Pigeonhole.csproj" />
     <ProjectReference Include="..\BardMusicPlayer\BardMusicPlayer.Quotidian\BardMusicPlayer.Quotidian.csproj" />
     <ProjectReference Include="..\BardMusicPlayer\BardMusicPlayer.Seer\BardMusicPlayer.Seer.csproj" />
+    <ProjectReference Include="..\BardMusicPlayer\BardMusicPlayer.Siren\BardMusicPlayer.Siren.csproj" />
+    <ProjectReference Include="..\BardMusicPlayer\BardMusicPlayer.Transmogrify\BardMusicPlayer.Transmogrify.csproj" />
     <ProjectReference Include="..\Sanford.Multimedia.Midi\Source\Sanford.Multimedia.Midi.csproj" />
   </ItemGroup>
 
