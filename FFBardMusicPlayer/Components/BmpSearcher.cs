@@ -16,6 +16,13 @@ namespace FFBardMusicPlayer.Controls {
 		public EventHandler<KeyEventArgs> OnHandledKeyDown;
 		public EventHandler<string> OnTextChange;
 
+		static Timer onKeyTimer = new Timer();
+		private static void TimerEventProcessor(object sender, EventArgs e, SongSearcher s)
+		{
+			onKeyTimer.Stop();
+			s.OnTextChange?.Invoke(s, s.Text);
+		}
+
 		// Events
 		protected override void OnTextChanged(EventArgs e) {
 			base.OnTextChanged(e);
@@ -27,17 +34,26 @@ namespace FFBardMusicPlayer.Controls {
         protected override void OnKeyPress(KeyPressEventArgs e)
         {
             base.OnKeyPress(e);
+			onKeyTimer.Stop();
+			if (onKeyTimer.Interval != 500)
+			{
+				onKeyTimer.Interval = 500;
+				onKeyTimer.Tick += delegate (object sender2, EventArgs e2)
+				{
+					TimerEventProcessor(sender2, e2, this);
+				};
+			}
 
 			// here, we can check if the input character in the search bar is either a
 			// letter or a number, and invoke the text change
 			if (char.IsLetterOrDigit(e.KeyChar))
             {
-				OnTextChange?.Invoke(this, this.Text);
+				onKeyTimer.Start();
 			}
 			// since backspace and delete are special, we'll want to listen for those as well
 			else if (e.KeyChar == (char)Keys.Delete || e.KeyChar == (char)Keys.Back)
             {
-				OnTextChange?.Invoke(this, this.Text);
+				onKeyTimer.Start();
 			}
         }
 

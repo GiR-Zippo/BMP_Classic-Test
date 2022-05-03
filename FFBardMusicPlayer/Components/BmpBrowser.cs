@@ -225,8 +225,9 @@ namespace FFBardMusicPlayer.Components {
 		public List<string> GetSongFiles() {
 			List<string> fileNames = new List<string>();
 			string dir = BmpPigeonhole.Instance.SongDirectory;
-			if(Directory.Exists(dir)) {
-				foreach(string file in Directory.EnumerateFiles(dir, "*.m*", SearchOption.AllDirectories).Where(s => s.ToLower().EndsWith(".mid"))) {
+			if(Directory.Exists(dir))
+			{
+				foreach(string file in Directory.EnumerateFiles(dir, "*.m*", SearchOption.AllDirectories).Where(s => s.ToLower().EndsWith(".mid")).AsParallel()) {
 					fileNames.Add(file);
 				}
 			}
@@ -244,16 +245,22 @@ namespace FFBardMusicPlayer.Components {
 					midis.Clear();
 					this.Items.Clear();
 					return;
-				} else {
-					if(filenameFilter.ToLower().EndsWith(".mid")) {
-						foreach(MidiFile file in this.Items) {
-							if(file.Enabled) {
-								if(file.FileName.RelativeFileName == filenameFilter) {
+				}
+				else
+				{
+					if(filenameFilter.ToLower().EndsWith(".mid"))
+					{
+						Parallel.ForEach(this.Items.Cast<MidiFile>().ToList(), file =>
+						{
+							if (file.Enabled)
+							{
+								if (file.FileName.RelativeFileName == filenameFilter)
+								{
 									singleEntry = file;
-									break;
+									return;
 								}
 							}
-						}
+						});
 					}
 				}
 			}
@@ -261,25 +268,29 @@ namespace FFBardMusicPlayer.Components {
 			midis.Clear();
 			this.Items.Clear();
 
-			foreach(string path in GetSongFiles()) {
+			foreach (string path in GetSongFiles())
+			{
 				MidiFile file = new MidiFile(path);
-
-				if(!string.IsNullOrEmpty(filenameFilter)) {
+				if (!string.IsNullOrEmpty(filenameFilter))
+				{
 					string f1 = file.FileName.TinyFileName.ToUpper();
 					string f2 = file.FileName.ShortFileName.ToUpper();
 					string f3 = filenameFilter.ToUpper();
-					if(singleEntry != null) {
-						if(file.FileName.RelativeFileName == singleEntry.FileName.RelativeFileName) {
+					if (singleEntry != null)
+					{
+						if (file.FileName.RelativeFileName == singleEntry.FileName.RelativeFileName)
+						{
 							focusEntry = file;
 						}
-					} else if(singleEntry == null) {
-						if(!f1.Contains(f3)) {
+					}
+					else if (singleEntry == null)
+					{
+						if (!f1.Contains(f3))
+						{
 							continue;
 						}
 					}
 				}
-
-				midis.Add(file);
 
 				int pd = file.FileName.PathDepth;
 				if(pd > 0) {
@@ -305,7 +316,8 @@ namespace FFBardMusicPlayer.Components {
 			}
 			else
 			{
-				if(this.SelectedIndex == -1) {
+				if(this.SelectedIndex == -1)
+				{
 					if(this.Items.Count > 0) {
 						this.SelectedIndex = 0;
 					}

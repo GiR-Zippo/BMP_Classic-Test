@@ -203,9 +203,7 @@
     <Compile Update="Components\BmpSpeedShift.Designer.cs">
       <DependentUpon>BmpSpeedShift.cs</DependentUpon>
     </Compile>
-    <Compile Update="Components\BmpSearcher.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Update="Components\BmpSearcher.cs" />
     <Compile Update="Components\BmpSearcher.Designer.cs">
       <DependentUpon>BmpSearcher.cs</DependentUpon>
     </Compile>
