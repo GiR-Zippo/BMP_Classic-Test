@@ -141,7 +141,8 @@ namespace FFBardMusicPlayer {
 
 			if(BmpGlobals.CurrentGame != null)
 			{
-				if (!BmpGlobals.CurrentGame.PlayerName.Equals("Unknown") &&
+				if ((BmpGlobals.CurrentGame.ConfigId.Length > 0) &&
+					(!BmpGlobals.CurrentGame.PlayerName.Equals("Unknown")) &&
 					(!BmpGlobals.CurrentGame.HomeWorld.Equals("Unknown")) &&
 					(BmpGlobals.CurrentGame.IsLoggedIn)&&
 					!isLoggedIn)
@@ -162,7 +163,14 @@ namespace FFBardMusicPlayer {
 		}
 
 		public bool IsScanning() {
-			return false; // Scanner.Instance.IsScanning;
+			if (BmpGlobals.CurrentGame != null)
+			{
+				if (BmpGlobals.CurrentGame.ConfigId.Length > 0)
+				{
+					return false;
+				}
+			}
+			return true;
 		}
 		public bool IsAttached() {
 			return ffxivProcess != null;

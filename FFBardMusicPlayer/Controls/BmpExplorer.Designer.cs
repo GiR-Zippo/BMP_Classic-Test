@@ -95,7 +95,7 @@
             this.OpenSong.AutoSize = true;
             this.OpenSong.FlatAppearance.BorderSize = 0;
             this.OpenSong.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.OpenSong.BackgroundImage = global::FFBardMusicPlayer.Properties.Resources.FolderOpen;
+            //this.OpenSong.BackgroundImage = global::FFBardMusicPlayer.Properties.Resources.FolderOpen;
             this.OpenSong.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.OpenSong.Location = new System.Drawing.Point(0, 0);
             this.OpenSong.Margin = new System.Windows.Forms.Padding(0);
