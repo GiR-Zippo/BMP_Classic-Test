@@ -42,19 +42,20 @@ namespace FFBardMusicPlayer.MidiAndSequencing
         {
             BmpLocalPerformer perf = new BmpLocalPerformer(game);
             perf.Dock = DockStyle.Top;
-            if (hostProcess == true)
-            {
-                perf.hostProcess = true;
+            perf.hostProcess = hostProcess;
+
+            List<int> tracks = new List<int>();
+            for (int i = 0; i < _performers.Count; i++)
+                tracks.Add(_performers[i].TrackNum);
+
+            var result = Enumerable.Range(1, _performers.Count+1).Except(tracks);
+            perf.TrackNum = result.First();
+
+            if (hostProcess)
                 _performers.Insert(0, perf);
-            }
             else
                 _performers.Add(perf);
 
-            for (int i = 0; i < _performers.Count; i++)
-            {
-                perf = _performers[i];
-                perf.TrackNum = i + 1;
-            }
             return perf;
         }
 

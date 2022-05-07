@@ -53,7 +53,8 @@ namespace FFBardMusicPlayer.Controls {
 			UpdateCharIds();
 
 			memory.OnProcessLost += Memory_OnProcessLost;
-            BmpSeer.Instance.PlayerNameChanged += Memory_OnCharacterIdChanged;
+			BmpSeer.Instance.ConfigIdChanged += Memory_OnCharacterIdChanged;
+			BmpSeer.Instance.PlayerNameChanged += Memory_OnPlayerNameChanged;
 		}
 
         private void Memory_OnProcessLost(object sender, EventArgs e) {
@@ -76,7 +77,18 @@ namespace FFBardMusicPlayer.Controls {
 			logger.Debug(str);
 		}
 
-		private void Memory_OnCharacterIdChanged(PlayerNameChanged seerEvent) {
+		private void Memory_OnCharacterIdChanged(ConfigIdChanged seerEvent) {
+			hook.ClearLastPerformanceKeybinds();
+			hotkeys.LoadKeybindDat(seerEvent.Game.ConfigId);
+			hotbar.LoadHotbarDat(seerEvent.Game.ConfigId);
+			addon.LoadAddonDat(seerEvent.Game.ConfigId);
+
+			BmpPigeonhole.Instance.LastCharId = seerEvent.Game.ConfigId;
+			CurrentCharId = seerEvent.Game.ConfigId;
+		}
+
+		private void Memory_OnPlayerNameChanged(PlayerNameChanged seerEvent)
+		{
 			hook.ClearLastPerformanceKeybinds();
 			hotkeys.LoadKeybindDat(seerEvent.Game.ConfigId);
 			hotbar.LoadHotbarDat(seerEvent.Game.ConfigId);

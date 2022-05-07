@@ -37,12 +37,12 @@ namespace BardMusicPlayer.Seer
 
         internal Game(Process process)
         {
-            _uuid   = Guid.NewGuid().ToString();
+            _uuid = Guid.NewGuid().ToString();
             Process = process;
-            _eventTokenSource       = new CancellationTokenSource();
-            _eventDedupeHistory     = new Dictionary<Type, long>();
+            _eventTokenSource = new CancellationTokenSource();
+            _eventDedupeHistory = new Dictionary<Type, long>();
             _eventQueueHighPriority = new ConcurrentQueue<SeerEvent>();
-            _eventQueueLowPriority  = new ConcurrentQueue<SeerEvent>();
+            _eventQueueLowPriority = new ConcurrentQueue<SeerEvent>();
         }
 
         internal bool Initialize()
@@ -60,9 +60,9 @@ namespace BardMusicPlayer.Seer
                 InitInformation();
 
                 _eventQueueOpen = true;
-                DatReader       = new ReaderHandler(this, new DatFileReaderBackend(1));
-                MemoryReader    = new ReaderHandler(this, new SharlayanReaderBackend(1));
-                NetworkReader   = new ReaderHandler(this, new MachinaReaderBackend(1));
+                DatReader = new ReaderHandler(this, new DatFileReaderBackend(1));
+                MemoryReader = new ReaderHandler(this, new SharlayanReaderBackend(1));
+                NetworkReader = new ReaderHandler(this, new MachinaReaderBackend(1));
                 Task.Factory.StartNew(() => RunEventQueue(_eventTokenSource.Token), TaskCreationOptions.LongRunning);
 
                 BmpSeer.Instance.PublishEvent(new GameStarted(this, Pid));
@@ -153,7 +153,8 @@ namespace BardMusicPlayer.Seer
                 while (_eventQueueHighPriority.TryDequeue(out _)) { }
                 while (_eventQueueLowPriority.TryDequeue(out _)) { }
                 _eventDedupeHistory.Clear();
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
             }
@@ -164,7 +165,7 @@ namespace BardMusicPlayer.Seer
         {
             if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((Game) obj);
+            return obj.GetType() == GetType() && Equals((Game)obj);
         }
 
         public bool Equals(Game other)
