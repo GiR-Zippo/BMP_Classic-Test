@@ -77,6 +77,8 @@ namespace FFBardMusicPlayer.MidiAndSequencing
         public void RemoveLocalProcesses(int Pid)
         {
             var res = _performers.AsParallel().Where(i => i.game.Pid == Pid);
+            if (res.Count() <= 0)
+                return;
             _performers.Remove(res.First());
         }
 

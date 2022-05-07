@@ -39,15 +39,11 @@ namespace BardMusicPlayer.Seer
         {
             _uuid = Guid.NewGuid().ToString();
             Process = process;
-            _eventTokenSource = new CancellationTokenSource();
-            _eventDedupeHistory = new Dictionary<Type, long>();
-            _eventQueueHighPriority = new ConcurrentQueue<SeerEvent>();
-            _eventQueueLowPriority = new ConcurrentQueue<SeerEvent>();
         }
 
         internal bool Initialize()
         {
-            //try
+            try
             {
                 if (Process is null || Process.Id < 1 || Pid != 0)
                 {
@@ -59,19 +55,25 @@ namespace BardMusicPlayer.Seer
                 Pid = Process.Id;
                 InitInformation();
 
+                _eventDedupeHistory = new Dictionary<Type, long>();
+                _eventQueueHighPriority = new ConcurrentQueue<SeerEvent>();
+                _eventQueueLowPriority = new ConcurrentQueue<SeerEvent>();
                 _eventQueueOpen = true;
+
                 DatReader = new ReaderHandler(this, new DatFileReaderBackend(1));
                 MemoryReader = new ReaderHandler(this, new SharlayanReaderBackend(1));
                 NetworkReader = new ReaderHandler(this, new MachinaReaderBackend(1));
+
+                _eventTokenSource = new CancellationTokenSource();
                 Task.Factory.StartNew(() => RunEventQueue(_eventTokenSource.Token), TaskCreationOptions.LongRunning);
 
                 BmpSeer.Instance.PublishEvent(new GameStarted(this, Pid));
             }
-            /*catch (Exception ex)
+            catch (Exception ex)
             {
                 BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
                 return false;
-            }*/
+            }
 
             return true;
         }
@@ -79,6 +81,7 @@ namespace BardMusicPlayer.Seer
         internal void PublishEvent(SeerEvent seerEvent)
         {
             if (!_eventQueueOpen) return;
+
             if (seerEvent.HighPriority) _eventQueueHighPriority.Enqueue(seerEvent);
             else _eventQueueLowPriority.Enqueue(seerEvent);
         }
@@ -119,10 +122,19 @@ namespace BardMusicPlayer.Seer
 
         public void Dispose()
         {
-            BmpSeer.Instance.PublishEvent(new GameStopped(Pid));
+            if ((_eventQueueHighPriority != null) && (_eventQueueHighPriority != null) && (_eventDedupeHistory != null))
+                BmpSeer.Instance.PublishEvent(new GameStopped(Pid));
 
             _eventQueueOpen = false;
-            _eventTokenSource.Cancel();
+            try
+            {
+                if (_eventTokenSource != null)
+                    _eventTokenSource.Cancel();
+            }
+            catch (Exception ex)
+            {
+                BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
+            }
 
             try
             {
@@ -132,6 +144,7 @@ namespace BardMusicPlayer.Seer
             {
                 BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
             }
+
             try
             {
                 MemoryReader?.Dispose();
@@ -140,6 +153,7 @@ namespace BardMusicPlayer.Seer
             {
                 BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
             }
+
             try
             {
                 NetworkReader?.Dispose();
@@ -148,16 +162,30 @@ namespace BardMusicPlayer.Seer
             {
                 BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
             }
+
             try
             {
-                while (_eventQueueHighPriority.TryDequeue(out _)) { }
-                while (_eventQueueLowPriority.TryDequeue(out _)) { }
-                _eventDedupeHistory.Clear();
+                if (_eventQueueHighPriority != null)
+                {
+                    while (_eventQueueHighPriority.TryDequeue(out _))
+                    {
+                    }
+                }
+
+                if (_eventQueueHighPriority != null)
+                {
+                    while (_eventQueueLowPriority.TryDequeue(out _))
+                    {
+                    }
+                }
+                if (_eventDedupeHistory != null)
+                    _eventDedupeHistory.Clear();
             }
             catch (Exception ex)
             {
                 BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
             }
+
             GC.SuppressFinalize(this);
         }
 
@@ -165,6 +193,7 @@ namespace BardMusicPlayer.Seer
         {
             if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
+
             return obj.GetType() == GetType() && Equals((Game)obj);
         }
 
@@ -172,11 +201,14 @@ namespace BardMusicPlayer.Seer
         {
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
+
             return _uuid == other._uuid;
         }
 
         public override int GetHashCode() => _uuid != null ? _uuid.GetHashCode() : 0;
+
         public static bool operator ==(Game game, Game otherGame) => game is not null && game.Equals(otherGame);
+
         public static bool operator !=(Game game, Game otherGame) => game is not null && !game.Equals(otherGame);
     }
 }
