@@ -125,9 +125,9 @@ namespace FFBardMusicPlayer {
 				}
 				if(IsScanning() && !hasScanned) {
 					Console.WriteLine("Scanning...");
-					while(IsScanning()) {
+					/*while(IsScanning()) {
 						Thread.Sleep(100);
-					}
+					}*/
 					Console.WriteLine("Finished scanning");
 					//OnProcessReady?.Invoke(this, ffxivProcess);
 					hasScanned = true;
@@ -164,12 +164,9 @@ namespace FFBardMusicPlayer {
 
 		public bool IsScanning() {
 			if (BmpGlobals.CurrentGame != null)
-			{
 				if (BmpGlobals.CurrentGame.ConfigId.Length > 0)
-				{
 					return false;
-				}
-			}
+
 			return true;
 		}
 		public bool IsAttached() {

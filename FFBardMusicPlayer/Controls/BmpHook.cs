@@ -7,6 +7,7 @@ using BardMusicPlayer.Quotidian.Structs;
 using Timer = System.Timers.Timer;
 using BardMusicPlayer.Pigeonhole;
 using BardMusicPlayer.Seer;
+using BardMusicPlayer.Seer.Events;
 
 namespace FFBardMusicPlayer.Controls {
 	public partial class BmpHook : UserControl {
@@ -52,7 +53,7 @@ namespace FFBardMusicPlayer.Controls {
 			UpdateCharIds();
 
 			memory.OnProcessLost += Memory_OnProcessLost;
-            BmpSeer.Instance.ConfigIdChanged += Memory_OnCharacterIdChanged;
+            BmpSeer.Instance.PlayerNameChanged += Memory_OnCharacterIdChanged;
 		}
 
         private void Memory_OnProcessLost(object sender, EventArgs e) {
@@ -75,14 +76,14 @@ namespace FFBardMusicPlayer.Controls {
 			logger.Debug(str);
 		}
 
-		private void Memory_OnCharacterIdChanged(BardMusicPlayer.Seer.Events.ConfigIdChanged seerEvent) {
+		private void Memory_OnCharacterIdChanged(PlayerNameChanged seerEvent) {
 			hook.ClearLastPerformanceKeybinds();
-			hotkeys.LoadKeybindDat(seerEvent.ConfigId);
-			hotbar.LoadHotbarDat(seerEvent.ConfigId);
-			addon.LoadAddonDat(seerEvent.ConfigId);
+			hotkeys.LoadKeybindDat(seerEvent.Game.ConfigId);
+			hotbar.LoadHotbarDat(seerEvent.Game.ConfigId);
+			addon.LoadAddonDat(seerEvent.Game.ConfigId);
 
-			BmpPigeonhole.Instance.LastCharId = seerEvent.ConfigId;
-			CurrentCharId = seerEvent.ConfigId;
+			BmpPigeonhole.Instance.LastCharId = seerEvent.Game.ConfigId;
+			CurrentCharId = seerEvent.Game.ConfigId;
 		}
 
 		public bool IsPerformanceReady() {
