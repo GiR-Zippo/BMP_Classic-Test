@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using BardMusicPlayer.Quotidian.Enums;
 using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Seer.Utilities;
@@ -139,8 +140,8 @@ namespace BardMusicPlayer.Seer
             string gamePath = null;
             try
             {
-                //repeat 100 rounds until the game is fully loaded
-                int iter = 100;
+                //repeat 10 rounds until the game is fully loaded
+                int iter = 10;
                 while (iter != 0)
                 {
                     try
@@ -160,6 +161,7 @@ namespace BardMusicPlayer.Seer
                     }
                     catch (SystemException ex)
                     {
+                        Task.Delay(100);
                         iter--;
                     }
                 }
