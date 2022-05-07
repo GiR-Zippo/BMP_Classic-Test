@@ -39,11 +39,15 @@ namespace BardMusicPlayer.Seer
         {
             _uuid   = Guid.NewGuid().ToString();
             Process = process;
+            _eventTokenSource       = new CancellationTokenSource();
+            _eventDedupeHistory     = new Dictionary<Type, long>();
+            _eventQueueHighPriority = new ConcurrentQueue<SeerEvent>();
+            _eventQueueLowPriority  = new ConcurrentQueue<SeerEvent>();
         }
 
         internal bool Initialize()
         {
-            try
+            //try
             {
                 if (Process is null || Process.Id < 1 || Pid != 0)
                 {
@@ -55,25 +59,19 @@ namespace BardMusicPlayer.Seer
                 Pid = Process.Id;
                 InitInformation();
 
-                _eventDedupeHistory     = new Dictionary<Type, long>();
-                _eventQueueHighPriority = new ConcurrentQueue<SeerEvent>();
-                _eventQueueLowPriority  = new ConcurrentQueue<SeerEvent>();
-                _eventQueueOpen         = true;
-
-                DatReader     = new ReaderHandler(this, new DatFileReaderBackend(1));
-                MemoryReader  = new ReaderHandler(this, new SharlayanReaderBackend(1));
-                NetworkReader = new ReaderHandler(this, new MachinaReaderBackend(1));
-
-                _eventTokenSource = new CancellationTokenSource();
+                _eventQueueOpen = true;
+                DatReader       = new ReaderHandler(this, new DatFileReaderBackend(1));
+                MemoryReader    = new ReaderHandler(this, new SharlayanReaderBackend(1));
+                NetworkReader   = new ReaderHandler(this, new MachinaReaderBackend(1));
                 Task.Factory.StartNew(() => RunEventQueue(_eventTokenSource.Token), TaskCreationOptions.LongRunning);
 
                 BmpSeer.Instance.PublishEvent(new GameStarted(this, Pid));
             }
-            catch (Exception ex)
+            /*catch (Exception ex)
             {
                 BmpSeer.Instance.PublishEvent(new GameExceptionEvent(this, Pid, ex));
                 return false;
-            }
+            }*/
 
             return true;
         }

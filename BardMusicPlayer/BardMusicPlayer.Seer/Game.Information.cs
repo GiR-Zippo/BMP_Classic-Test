@@ -136,20 +136,33 @@ namespace BardMusicPlayer.Seer
 
         private string GetGamePath()
         {
+            string gamePath = null;
             try
             {
-                var gamePath = Process.Modules.Cast<ProcessModule>()
-                    .Aggregate("",
-                        (current, module) =>
-                            module.ModuleName.ToLower() switch
-                            {
-                                "ffxiv_dx11.exe" => Directory
-                                    .GetParent(Path.GetDirectoryName(module.FileName) ?? string.Empty)
-                                    ?.FullName,
-                                _ => current
-                            }
-                    );
-
+                //repeat 100 rounds until the game is fully loaded
+                int iter = 100;
+                while (iter != 0)
+                {
+                    try
+                    {
+                        gamePath = Process.Modules.Cast<ProcessModule>()
+                            .Aggregate("",
+                                (current, module) =>
+                                    module.ModuleName.ToLower() switch
+                                    {
+                                        "ffxiv_dx11.exe" => Directory
+                                            .GetParent(Path.GetDirectoryName(module.FileName) ?? string.Empty)
+                                            ?.FullName,
+                                        _ => current
+                                    }
+                            );
+                        break;
+                    }
+                    catch (SystemException ex)
+                    {
+                        iter--;
+                    }
+                }
                 if (string.IsNullOrEmpty(gamePath))
                     throw new BmpSeerGamePathException(
                         "Cannot locate the running directory of this game's ffxiv_dx11.exe");
