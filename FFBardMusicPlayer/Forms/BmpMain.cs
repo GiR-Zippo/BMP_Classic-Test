@@ -115,6 +115,10 @@ namespace FFBardMusicPlayer.Forms {
 				this.Invoke(t => t.LocalOrchestraUpdate(performance));
 			};
 
+			BmpSeer.Instance.PlayerNameChanged += delegate (BardMusicPlayer.Seer.Events.PlayerNameChanged performance) {
+				this.Invoke(t => t.PlayerNameChanged(performance));
+			};
+
 			BmpSeer.Instance.EnsembleStarted += delegate (BardMusicPlayer.Seer.Events.EnsembleStarted e) {
 				this.Invoke(t => t.Machina_EnsembleStarted(e));
 			};
@@ -283,11 +287,20 @@ namespace FFBardMusicPlayer.Forms {
 
 		public void GameStopped(BardMusicPlayer.Seer.Events.GameStopped e)
 		{
-			if (BmpGlobals.CurrentGame.Pid == e.Pid)
+			if ((BmpGlobals.CurrentGame != null) && (BmpGlobals.CurrentGame.Pid == e.Pid))
 				BmpGlobals.CurrentGame = null;
 
 			if (LocalOrchestra.OrchestraEnabled)
 				LocalOrchestra.RemoveLocalProcesses(e.Pid);
+		}
+
+		private void PlayerNameChanged(BardMusicPlayer.Seer.Events.PlayerNameChanged seerEvent)
+		{
+			if (BmpGlobals.CurrentGame != null)
+			{
+				if (LocalOrchestra.OrchestraEnabled)
+					LocalOrchestra.UpdateLocalProcesses(seerEvent.Game);
+			}
 		}
 
 		public void ErrorProcess(BmpHook.ProcessError error) {

@@ -10,6 +10,8 @@ using Timer = System.Timers.Timer;
 using System.Timers;
 using System.Diagnostics;
 using BardMusicPlayer.Seer;
+using System.Threading.Tasks;
+using FFBardMusicPlayer.MidiAndSequencing;
 
 namespace FFBardMusicPlayer.Controls {
 	public partial class BmpLocalOrchestra : UserControl {
@@ -44,166 +46,32 @@ namespace FFBardMusicPlayer.Controls {
 			}
 		}
 
-		List<BmpLocalPerformer> _performers = new List<BmpLocalPerformer>();
-
 		public BmpLocalOrchestra() {
 			InitializeComponent();
 		}
 
-		private void StartSyncWorker() {
-			BackgroundWorker syncWorker = new BackgroundWorker();
-			syncWorker.WorkerSupportsCancellation = true;
-			syncWorker.DoWork += SyncWorker_DoWork;
-			syncWorker.RunWorkerCompleted += SyncWorker_RunWorkerCompleted;
-
-			this.UpdateMemory();
-
-			List<uint> actorIds = new List<uint>();
-			foreach(Control ctl in PerformerPanel.Controls) {
-				BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
-				if(performer != null && performer.PerformerEnabled && performer.PerformanceUp) {
-					actorIds.Add(performer.actorId);
-				}
-			}
-			syncWorker.RunWorkerAsync(actorIds);
-
-			onMemoryCheck.Invoke(this, true);
-		}
-
-		private void SyncWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
-			SyncData data = (e.Result as SyncData);
-
-			StringBuilder debugDump = new StringBuilder();
-			
-			if (BmpSeer.Instance.Games.Count > 0)
-			{
-				foreach (var game in BmpSeer.Instance.Games)
-				{
-					debugDump.AppendLine(string.Format("{0} MS {1}", game.Value.PlayerName, game.Key));
-				}
-			}
-
-			onMemoryCheck.Invoke(this, false);
-
-			//MessageBox.Show(this.Parent, debugDump.ToString());
-			Console.WriteLine(debugDump.ToString());
-		}
-
-		// Start memory poll sync
-
-		private void SyncWorker_DoWork(object sender, DoWorkEventArgs e) {
-			BackgroundWorker worker = (sender as BackgroundWorker);
-			List<uint> actorIds = (e.Argument as List<uint>);
-			SyncData data = new SyncData();
-			Dictionary<int, Game> performanceToActor = new Dictionary<int, Game>();
-			foreach (var game in BmpSeer.Instance.Games)
-			{
-				if (actorIds.Contains(game.Value.ActorId))
-					performanceToActor[game.Value.Pid] = game.Value;
-			}	
-
-			if(e.Cancel) {
-				return;
-			}
-
-			List<Game> performanceCache;
-			List<int> perfKeys = performanceToActor.Keys.ToList();
-
-			Stopwatch msCounter = Stopwatch.StartNew();
-			DateTime now = DateTime.Now;
-
-			while(!worker.CancellationPending)
-			{
-				if(e.Cancel) {
-					return;
-				}
-						/*performanceCache = BmpSeer.Instance.Games.Values.ToList();
-
-						foreach(int pid in perfKeys) {
-							if(performanceToActor.ContainsKey(pid)) {
-								// Check it
-								if(performanceCache[pid].Pid > 0) {
-									uint aid = performanceToActor[pid];
-									//data.idTimestamp[aid] = msCounter.ElapsedMilliseconds;
-									data.idTimestamp[aid] = (long)((DateTime.Now - now).TotalMilliseconds);
-									performanceToActor.Remove(pid);
-								}
-							}
-						}
-						if(perfKeys.Count != performanceToActor.Keys.Count) {
-							perfKeys = performanceToActor.Keys.ToList();
-						}
-						if(performanceToActor.Keys.Count == 0) {
-							break;
-						}*/
-			}
-
-			e.Result = data;
-		}
-
 		public void AddLocalProcesses(Game game, bool hostProcess = false)
 		{
-			PerformerPanel.Controls.Clear();
-			BmpLocalPerformer perf = new BmpLocalPerformer(game);
-			perf.Dock = DockStyle.Top;
-			if (hostProcess == true)
-			{
-				perf.hostProcess = true;
-				_performers.Insert(0, perf);
-			}
-			else
-				_performers.Add(perf);
+			PerformerPanel.Controls.Add(LocalOrchestraHandler.Instance.AddLocalPerformer(game, hostProcess));
+			updatePanel(false);
+		}
 
-			for (int i = 0; i < _performers.Count; i++)
-			{
-				perf = _performers[i];
-				perf.TrackNum = i + 1;
-				PerformerPanel.Controls.Add(perf);
-			}
+		public void UpdateLocalProcesses(Game game, bool hostProcess = false)
+		{
+			LocalOrchestraHandler.Instance.UpdateLocalPerformer(game, hostProcess);
+			updatePanel(false);
 		}
 
 		public void RemoveLocalProcesses(int Pid, bool hostProcess = false)
 		{
-			PerformerPanel.Controls.Clear();
-			foreach (var performer in _performers)
-			{
-				if (performer.game.Pid == Pid)
-				{
-					_performers.Remove(performer);
-					break;
-				}
-			}
-
-			BmpLocalPerformer perf;
-			for (int i = 0; i < _performers.Count; i++)
-			{
-				perf = _performers[i];
-				perf.TrackNum = i + 1;
-				PerformerPanel.Controls.Add(perf);
-			}
+			LocalOrchestraHandler.Instance.RemoveLocalProcesses(Pid);
+			updatePanel();
 		}
 
-		public void PopulateLocalProcesses(List<MultiboxProcess> processes) {
-			PerformerPanel.Controls.Clear();
-
-			int track = 1;
-			foreach(MultiboxProcess mp in processes) {
-				BmpLocalPerformer perf = new BmpLocalPerformer(mp);
-				perf.Dock = DockStyle.Top;
-
-				if(mp.hostProcess == true) {
-					perf.hostProcess = true;
-					_performers.Insert(0, perf);
-				} else {
-					_performers.Add(perf);
-				}
-				track++;
-			}
-			for(int i = 0; i < _performers.Count; i++) {
-				BmpLocalPerformer perf = _performers[i];
-				perf.TrackNum = i+1;
-				PerformerPanel.Controls.Add(perf);
-			}
+		public void PopulateLocalProcesses(List<MultiboxProcess> processes) 
+		{
+			LocalOrchestraHandler.Instance.PopulateLocalProcesses(processes);
+			updatePanel();
 		}
 
 		public void UpdateMemory()
@@ -224,41 +92,19 @@ namespace FFBardMusicPlayer.Controls {
 		}
 
 		public void UpdatePerformers(BmpSequencer seq) {
-			if(seq == null) {
-				return;
-			}
-			foreach(Control ctl in PerformerPanel.Controls) {
-				BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
-				if(performer != null) {
-					performer.Sequencer = seq;
-				}
-			}
+			LocalOrchestraHandler.Instance.UpdatePerformers(seq);
 		}
 
 		public void PerformerProgress(int prog) {
-			foreach(Control ctl in PerformerPanel.Controls) {
-				BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
-				if(performer != null) {
-					performer.SetProgress(prog);
-				}
-			}
+			LocalOrchestraHandler.Instance.PerformerProgress(prog);
 		}
 
-		public void PerformerPlay(bool play) {
-			foreach(Control ctl in PerformerPanel.Controls) {
-				BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
-				if(performer != null) {
-					performer.Play(play);
-				}
-			}
+		public void PerformerPlay(bool play)
+		{
+			LocalOrchestraHandler.Instance.PerformerPlay(play);
 		}
 		public void PerformerStop() {
-			foreach(Control ctl in PerformerPanel.Controls) {
-				BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
-				if(performer != null) {
-					performer.Stop();
-				}
-			}
+			LocalOrchestraHandler.Instance.PerformerStop();
 		}
 
 		public List<string> GetPerformerNames() {
@@ -301,24 +147,25 @@ namespace FFBardMusicPlayer.Controls {
             return null;
         }
 
-        private void openInstruments_Click(object sender, EventArgs e) {
-			
-			foreach(Control ctl in PerformerPanel.Controls) {
-				BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
-				if(performer != null && performer.PerformerEnabled) {
-					performer.OpenInstrument();
-				}
+		private void updatePanel(bool initTracknum = true)
+		{
+			PerformerPanel.Controls.Clear();
+			for (int i = 0; i < LocalOrchestraHandler.Instance.Performers.Count; i++)
+			{
+				BmpLocalPerformer perf = LocalOrchestraHandler.Instance.Performers[i];
+				perf.TrackNum = initTracknum ? i + 1 : LocalOrchestraHandler.Instance.Performers[i].TrackNum;
+				PerformerPanel.Controls.Add(perf);
 			}
+		}
+
+		private void openInstruments_Click(object sender, EventArgs e)
+		{
+			LocalOrchestraHandler.Instance.OpenInstruments();
 		}
 
 		private void closeInstruments_Click(object sender, EventArgs e) {
             parentSequencer.Pause();
-            foreach (Control ctl in PerformerPanel.Controls) {
-				BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
-				if(performer != null && performer.PerformerEnabled) {
-					performer.CloseInstrument();
-				}
-			}
+			LocalOrchestraHandler.Instance.CloseInstruments();
 		}
 
 		private void muteAll_Click(object sender, EventArgs e) {

@@ -38,10 +38,53 @@ namespace FFBardMusicPlayer {
 
 			processWorker.DoWork += ButtonLabelTask;
 			processWorker.WorkerSupportsCancellation = true;
+
+			BmpSeer.Instance.GameStarted += delegate (BardMusicPlayer.Seer.Events.GameStarted e) {
+				this.Invoke(t => t.GameStarted(e));
+			};
+
+			BmpSeer.Instance.GameStopped += delegate (BardMusicPlayer.Seer.Events.GameStopped e) {
+				this.Invoke(t => t.GameStopped(e));
+			};
+
+			BmpSeer.Instance.PlayerNameChanged += delegate (BardMusicPlayer.Seer.Events.PlayerNameChanged e) {
+				this.Invoke(t => t.GameReady(e));
+			};
 		}
+
 		protected override void OnPaint(PaintEventArgs e) {
 			base.OnPaint(e);
 			ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.Black, ButtonBorderStyle.Solid);
+		}
+
+		public void GameReady(BardMusicPlayer.Seer.Events.PlayerNameChanged e)
+		{
+			if (this.Visible)
+			{
+                Game game = e.Game;
+				foreach (var t in ProcessList.Controls)
+				{
+					var but = t as Button;
+					if (but.Text.Contains(game.Pid.ToString()))
+					{
+						but.Name = string.Format("{0} ({1})", game.PlayerName, game.Pid);
+						but.Invoke(t => t.Text = but.Name);
+					}
+				}
+			}
+		}
+
+		public void GameStarted(BardMusicPlayer.Seer.Events.GameStarted e)
+		{
+			if (this.Visible)
+				RefreshList();
+			return;
+		}
+
+		public void GameStopped(BardMusicPlayer.Seer.Events.GameStopped e)
+		{
+			if (this.Visible)
+				RefreshList();
 		}
 
 		private void ButtonLabelTask(object o, DoWorkEventArgs e) {
@@ -94,7 +137,9 @@ namespace FFBardMusicPlayer {
 		public void RefreshList() {
 			RefreshList(this, EventArgs.Empty);
 		}
-		public void RefreshList(object o, EventArgs a) {
+
+		public void RefreshList(object o, EventArgs a)
+		{
 			ProcessList.Controls.Clear();
 			processWorker.CancelAsync();
 			if (BmpSeer.Instance.Games.Count == 0)
@@ -116,7 +161,6 @@ namespace FFBardMusicPlayer {
 				HeaderText.Text = "Select FFXIV process:";
 				foreach (var game in BmpSeer.Instance.Games)
 				{
-					//_ = WaitForPerformer(game.Value);
 					Process proc = Process.GetProcessById(game.Value.Pid);
 					string debug = string.Format("{0} - {1}", proc.ProcessName, proc.MainWindowTitle);
 					int width = ProcessList.Size.Width - 20;
@@ -140,24 +184,6 @@ namespace FFBardMusicPlayer {
 			}
 		}
 
-		/// <summary>
-		/// Ensure the player and game is fully loaded
-		/// </summary>
-		/// <param name="game"></param>
-		/// <param name="IsHost"></param>
-		/// <returns></returns>
-		public bool WaitForPerformer(Game game)
-		{
-			while (true)
-			{
-				if (game.ConfigId.Length > 0)
-				{
-					return true;
-				}
-				Task.Delay(200);
-			}
-		}
-
 		public void CancelProcessWorkerSync() {
 			if(processWorker.IsBusy) {
 				processWorker.CancelAsync();
@@ -176,9 +202,12 @@ namespace FFBardMusicPlayer {
 			if(Control.ModifierKeys == Keys.Shift) {
 				useLocalOrchestra = true;
 			}
-			if(useLocalOrchestra) {
-				for(int i = multiboxProcesses.Count - 1; i >= 0; i--) {
-					if(multiboxProcesses[i].game == game) {
+			if(useLocalOrchestra)
+			{
+				for(int i = multiboxProcesses.Count - 1; i >= 0; i--)
+				{
+					if(multiboxProcesses[i].game == game)
+					{
 						multiboxProcesses[i].hostProcess = true;
 					}
 				}
