@@ -45,7 +45,10 @@ namespace FFBardMusicPlayer.Forms
 			if (BmpGlobals.CurrentGame.ChatStatus)
 				return;
 
-			if (FFXIV.hotkeys.GetKeybindFromNoteByte(onNote.note) is FFXIVKeybindDat.Keybind keybind)
+			if (onNote.note < 0 || onNote.note > 36)
+				return;
+
+			if (BmpGlobals.CurrentGame.NoteKeys[(BardMusicPlayer.Quotidian.Enums.NoteKey)onNote.note] is BardMusicPlayer.Quotidian.Enums.Keys keybind)
 			{
 				if (BmpPigeonhole.Instance.HoldNotes)
 					FFXIV.hook.SendKeybindDown(keybind);
@@ -72,12 +75,13 @@ namespace FFBardMusicPlayer.Forms
 			if (BmpGlobals.CurrentGame.ChatStatus)
 				return;
 
+			if (offNote.note < 0 || offNote.note > 36)
+				return;
+
 			if (BmpPigeonhole.Instance.HoldNotes)
 			{
-				if (FFXIV.hotkeys.GetKeybindFromNoteByte(offNote.note) is FFXIVKeybindDat.Keybind keybind)
-				{
+				if (BmpGlobals.CurrentGame.NoteKeys[(BardMusicPlayer.Quotidian.Enums.NoteKey)offNote.note] is BardMusicPlayer.Quotidian.Enums.Keys keybind)
 					FFXIV.hook.SendKeybindUp(keybind);
-				}
 			}
 		}
 		private void ChangeMidiVoice(Object o, ProgChangeEvent progdata)
@@ -121,8 +125,8 @@ namespace FFBardMusicPlayer.Forms
 						break;
 				}
 
-				if (tone > -1 && tone < 5 && FFXIV.hotkeys.GetKeybindFromToneKey(tone) is FFXIVKeybindDat.Keybind keybind)
-					FFXIV.hook.SendSyncKeybind(keybind);
+				if (tone > -1 && tone < 5 && BmpGlobals.CurrentGame.InstrumentToneMenuKeys[(BardMusicPlayer.Quotidian.Enums.InstrumentToneMenuKey)tone] is BardMusicPlayer.Quotidian.Enums.Keys keybind)
+					FFXIV.hook.SendSyncKey(keybind);
 			}
 		}
 	}

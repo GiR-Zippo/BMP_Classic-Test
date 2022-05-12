@@ -198,9 +198,6 @@ namespace FFBardMusicPlayer.Controls {
 		}
 
 		private void testC_Click(object sender, EventArgs e) {
-
-			//StartSyncWorker();
-
 			foreach(Control ctl in PerformerPanel.Controls) {
 				BmpLocalPerformer performer = (ctl as BmpLocalPerformer);
 				if(performer != null && performer.PerformerEnabled) {

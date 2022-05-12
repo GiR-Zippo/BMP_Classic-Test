@@ -149,8 +149,13 @@ namespace FFBardMusicPlayer.Forms {
 			};
 			Settings.OnKeyboardTest += delegate (object o, EventArgs arg) {
 				
-				foreach(FFXIVKeybindDat.Keybind keybind in FFXIV.hotkeys.GetPerformanceKeybinds()) {
-					FFXIV.hook.SendSyncKeybind(keybind);
+				for(int i =0; i < Enum.GetNames(typeof(BardMusicPlayer.Quotidian.Enums.NoteKey)).Length; i++)
+				{
+					if (!FFXIV.IsPerformanceReady())
+						return;
+
+					if (BmpGlobals.CurrentGame.NoteKeys[(BardMusicPlayer.Quotidian.Enums.NoteKey)i] is BardMusicPlayer.Quotidian.Enums.Keys keybind)
+						FFXIV.hook.SendSyncKeybind(keybind);
 					Thread.Sleep(100);
 				}
 			};
@@ -500,7 +505,7 @@ namespace FFBardMusicPlayer.Forms {
 			{
 				if(key == Keys.F10) {
 					foreach(FFXIVKeybindDat.Keybind keybind in FFXIV.hotkeys.GetPerformanceKeybinds()) {
-						FFXIV.hook.SendAsyncKey(keybind.GetKey());
+						FFXIV.hook.SendAsyncKey((BardMusicPlayer.Quotidian.Enums.Keys)keybind.GetKey());
 						System.Threading.Thread.Sleep(100);
 					}
 				}

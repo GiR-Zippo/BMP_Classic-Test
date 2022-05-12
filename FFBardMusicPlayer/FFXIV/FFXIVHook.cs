@@ -1,11 +1,11 @@
-﻿using System;
+﻿using BardMusicPlayer.Quotidian.Enums;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 using Timer = System.Timers.Timer;
 
@@ -139,13 +139,13 @@ namespace FFBardMusicPlayer {
 
 		#endregion
 
-		public List<FFXIVKeybindDat.Keybind> lastPerformanceKeys = new List<FFXIVKeybindDat.Keybind>();
+		public List<Keys> lastPerformanceKeys = new List<Keys>();
 
 		private IntPtr mainWindowHandle;
 		private static MessageProc proc;
 		private IntPtr _hookID = IntPtr.Zero;
 
-		public EventHandler<Keys> OnKeyPressed;
+		public EventHandler<System.Windows.Forms.Keys> OnKeyPressed;
 
 		private Process referenceProcess;
 		public Process Process {
@@ -354,43 +354,35 @@ namespace FFBardMusicPlayer {
 			SendInput((uint) keyList.Count, keyList.ToArray(), Marshal.SizeOf(typeof(INPUT)));
 		}
 
-		public void SendAsyncKeybind(FFXIVKeybindDat.Keybind keybind) {
+		public void SendAsyncKeybind(Keys keybind) {
 
-			SendAsyncKey(keybind.GetKey(), true, true, true);
+			SendAsyncKey(keybind, true, true, true);
 		}
-		public void SendSyncKeybind(FFXIVKeybindDat.Keybind keybind) {
-			SendSyncKey(keybind.GetKey(), true, true, true);
+		public void SendSyncKeybind(Keys keybind) {
+			SendSyncKey(keybind, true, true, true);
 		}
 
-		public void SendTimedSyncKeybind(FFXIVKeybindDat.Keybind keybind)
+		public void SendTimedSyncKeybind(Keys keybind)
         {
-			SendTimedSyncKey(keybind.GetKey(), true, true, true);
+			SendTimedSyncKey(keybind, true, true, true);
         }
 
-		public void SendKeybindDown(FFXIVKeybindDat.Keybind keybind) {
-			if(keybind == null) {
-				return;
-			}
-			Keys key = keybind.GetKey();
-			if(key == Keys.None) {
+		public void SendKeybindDown(Keys keybind) {
+			if(keybind == Keys.None) {
 				return;
 			}
 
-			SendAsyncKey(key, true, true, false);
+			SendAsyncKey(keybind, true, true, false);
 
 			if(!lastPerformanceKeys.Contains(keybind)) {
 				lastPerformanceKeys.Add(keybind);
 			}
 		}
-		public void SendKeybindUp(FFXIVKeybindDat.Keybind keybind) {
-			if(keybind == null) {
+		public void SendKeybindUp(Keys keybind) {
+			if(keybind == Keys.None) {
 				return;
 			}
-			Keys key = keybind.GetKey();
-			if(key == Keys.None) {
-				return;
-			}
-			SendAsyncKey(key, true, false, true);
+			SendAsyncKey(keybind, true, false, true);
 
 			if(lastPerformanceKeys.Contains(keybind)) {
 				lastPerformanceKeys.Remove(keybind);
@@ -398,8 +390,8 @@ namespace FFBardMusicPlayer {
 		}
 
 		public void ClearLastPerformanceKeybinds() {
-			foreach(FFXIVKeybindDat.Keybind keybind in lastPerformanceKeys.ToArray()) {
-				SendSyncKey(keybind.GetKey(), true, false, true);
+			foreach(Keys keybind in lastPerformanceKeys.ToArray()) {
+				SendSyncKey(keybind, true, false, true);
 			}
 			lastPerformanceKeys.Clear();
 		}
@@ -417,7 +409,7 @@ namespace FFBardMusicPlayer {
 		public void SendMouseClick(int x, int y) {
 			FFXIVHook.POINT point = new FFXIVHook.POINT(x, y);
 			if(this.GetScreenFromClientPoint(ref point)) {
-				Cursor.Position = new Point(point.X, point.Y);
+				System.Windows.Forms.Cursor.Position = new Point(point.X, point.Y);
 				List<INPUT> mouseDown = new List<INPUT> {
 					new INPUT {
 						type = 0,
@@ -471,7 +463,7 @@ namespace FFBardMusicPlayer {
 			if(GetForegroundWindow() == mainWindowHandle) {
 				if(nCode >= 0 && wParam == (IntPtr) WM_KEYDOWN) {
 					int vkCode = Marshal.ReadInt32(lParam);
-					OnKeyPressed?.Invoke(this, ((Keys) vkCode));
+					OnKeyPressed?.Invoke(this, ((System.Windows.Forms.Keys) vkCode));
 				}
 			}
 			return CallNextHookEx(_hookID, nCode, wParam, lParam);
