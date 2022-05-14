@@ -388,7 +388,7 @@ namespace FFBardMusicPlayer {
 
 			loadedError = string.Empty;
 			try {
-				Sequence = new Sequence(DryWetUtil.ScrubFile(file));
+				Sequence = new Sequence(BardMusicPlayer.Transmogrify.Song.BmpSong.OpenFile(file).Result.GetSequencerMidi());
 			} catch(Exception e) {
 				Console.WriteLine(e.StackTrace);
 				throw e;

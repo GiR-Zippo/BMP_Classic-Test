@@ -230,6 +230,10 @@ namespace FFBardMusicPlayer.Components {
 				foreach(string file in Directory.EnumerateFiles(dir, "*.m*", SearchOption.AllDirectories).Where(s => s.ToLower().EndsWith(".mid")).AsParallel()) {
 					fileNames.Add(file);
 				}
+				foreach (string file in Directory.EnumerateFiles(dir, "*.m*", SearchOption.AllDirectories).Where(s => s.ToLower().EndsWith(".mmsong")).AsParallel())
+				{
+					fileNames.Add(file);
+				}
 			}
 			return fileNames;
 		}
@@ -248,7 +252,7 @@ namespace FFBardMusicPlayer.Components {
 				}
 				else
 				{
-					if(filenameFilter.ToLower().EndsWith(".mid"))
+					if(filenameFilter.ToLower().EndsWith(".mid") || filenameFilter.ToLower().EndsWith(".mmsong"))
 					{
 						Parallel.ForEach(this.Items.Cast<MidiFile>().ToList(), file =>
 						{

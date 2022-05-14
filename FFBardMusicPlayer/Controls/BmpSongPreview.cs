@@ -53,7 +53,7 @@ namespace FFBardMusicPlayer.Controls {
 			if (openFileDialog.FileName.Length <= 0)
 				return;
 
-			BmpSong song = BmpSong.OpenMidiFile(openFileDialog.FileName).Result;
+			BmpSong song = BmpSong.OpenFile(openFileDialog.FileName).Result;
 			songName.Text = song.Title;
 			trkCount.Text = (song.TrackContainers.Count()-1).ToString();
 			_ = BmpSiren.Instance.Load(song);
