@@ -154,6 +154,11 @@ namespace BardMusicPlayer.Pigeonhole
         public virtual int ToneKeyDelay { get; set; } = 3;
 
         /// <summary>
+        /// Compatmode for MidiBard
+        /// </summary>
+        public virtual bool MidiBardCompatMode { get; set; } = false;
+
+        /// <summary>
         /// Defaults to log level Info
         /// </summary>
         public virtual BmpLog.Verbosity DefaultLogLevel { get; set; } = BmpLog.Verbosity.Info;

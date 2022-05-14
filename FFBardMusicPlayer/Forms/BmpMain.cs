@@ -443,7 +443,11 @@ namespace FFBardMusicPlayer.Forms {
 			if (BmpPigeonhole.Instance.AutostartMethod != 2)
 				return;
 
-			Thread.Sleep(2500);
+			if (BmpPigeonhole.Instance.MidiBardCompatMode)
+				Thread.Sleep(2500 + 3405);
+			else
+				Thread.Sleep(2500);
+
 			Player.Player.Play();
 		}
 

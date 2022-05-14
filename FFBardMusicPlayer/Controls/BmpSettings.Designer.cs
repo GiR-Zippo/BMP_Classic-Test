@@ -44,7 +44,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.AutostartMethod = new System.Windows.Forms.ComboBox();
             this.SettingChatSave = new System.Windows.Forms.CheckBox();
-            this.sigCheckbox = new System.Windows.Forms.CheckBox();
+            this.midibardCheckbox = new System.Windows.Forms.CheckBox();
             this.verboseToggle = new System.Windows.Forms.CheckBox();
             this.HelpTip = new System.Windows.Forms.ToolTip(this.components);
             this.GeneralSettings.SuspendLayout();
@@ -138,19 +138,18 @@
             this.ThanksTable.TabIndex = 26;
             this.ThanksTable.TabStop = false;
             this.ThanksTable.Text = "Huh, nothing here?";
-            //
+            // 
             // StaffNames
-            //
-            this.StaffNames.Name = "StaffNames";
+            // 
             this.StaffNames.Location = new System.Drawing.Point(5, 18);
-            this.StaffNames.Size = new System.Drawing.Size(290, 120);
             this.StaffNames.Multiline = true;
-            this.StaffNames.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.StaffNames.Name = "StaffNames";
             this.StaffNames.ReadOnly = true;
-            this.StaffNames.Text = "Big thank you to all members of the Bards of Light!\r\n\r\n" +
-                                   "Thanks to the founders of this adventure,\r\n" +
-                                   "to all of the former members of this band\r\n" +
-                                   "and in honour of those whom we lost along the way.\r\n";
+            this.StaffNames.Size = new System.Drawing.Size(290, 120);
+            this.StaffNames.TabIndex = 0;
+            this.StaffNames.Text = "Big thank you to all members of the Bards of Light!\r\n\r\nThanks to the founders of " +
+    "this adventure,\r\nto all of the former members of this band\r\nand in honour of tho" +
+    "se whom we lost along the way.\r\n";
             // 
             // ChatSettings
             // 
@@ -279,7 +278,7 @@
             this.MiscSettings.Controls.Add(this.label1);
             this.MiscSettings.Controls.Add(this.AutostartMethod);
             this.MiscSettings.Controls.Add(this.SettingChatSave);
-            this.MiscSettings.Controls.Add(this.sigCheckbox);
+            this.MiscSettings.Controls.Add(this.midibardCheckbox);
             this.MiscSettings.Controls.Add(this.verboseToggle);
             this.MiscSettings.Location = new System.Drawing.Point(3, 103);
             this.MiscSettings.Name = "MiscSettings";
@@ -316,7 +315,7 @@
             // SettingChatSave
             // 
             this.SettingChatSave.AutoSize = true;
-            this.SettingChatSave.Location = new System.Drawing.Point(12, 44);
+            this.SettingChatSave.Location = new System.Drawing.Point(15, 65);
             this.SettingChatSave.Name = "SettingChatSave";
             this.SettingChatSave.Size = new System.Drawing.Size(177, 17);
             this.SettingChatSave.TabIndex = 5;
@@ -325,22 +324,21 @@
             this.SettingChatSave.UseVisualStyleBackColor = true;
             this.SettingChatSave.CheckedChanged += new System.EventHandler(this.SettingChatSave_CheckedChanged);
             // 
-            // sigCheckbox
+            // midibardCheckbox
             // 
-            this.sigCheckbox.AutoSize = true;
-            this.sigCheckbox.Location = new System.Drawing.Point(12, 90);
-            this.sigCheckbox.Name = "sigCheckbox";
-            this.sigCheckbox.Size = new System.Drawing.Size(152, 17);
-            this.sigCheckbox.TabIndex = 15;
-            this.sigCheckbox.Text = "Ignore signature update";
-            this.sigCheckbox.UseVisualStyleBackColor = true;
-            this.sigCheckbox.Visible = false;
-            this.sigCheckbox.CheckedChanged += new System.EventHandler(this.sigCheckbox_CheckedChanged);
+            this.midibardCheckbox.AutoSize = true;
+            this.midibardCheckbox.Location = new System.Drawing.Point(15, 42);
+            this.midibardCheckbox.Name = "midibardCheckbox";
+            this.midibardCheckbox.Size = new System.Drawing.Size(213, 17);
+            this.midibardCheckbox.TabIndex = 15;
+            this.midibardCheckbox.Text = "MidiBard compat mode (metronome)";
+            this.midibardCheckbox.UseVisualStyleBackColor = true;
+            this.midibardCheckbox.CheckedChanged += new System.EventHandler(this.midibardCheckbox_CheckedChanged);
             // 
             // verboseToggle
             // 
             this.verboseToggle.AutoSize = true;
-            this.verboseToggle.Location = new System.Drawing.Point(12, 67);
+            this.verboseToggle.Location = new System.Drawing.Point(15, 88);
             this.verboseToggle.Name = "verboseToggle";
             this.verboseToggle.Size = new System.Drawing.Size(136, 17);
             this.verboseToggle.TabIndex = 20;
@@ -371,6 +369,7 @@
             this.SettingsScrollPanel.ResumeLayout(false);
             this.SettingsTable.ResumeLayout(false);
             this.ThanksTable.ResumeLayout(false);
+            this.ThanksTable.PerformLayout();
             this.ChatSettings.ResumeLayout(false);
             this.ChatSettings.PerformLayout();
             this.PlaybackSettings.ResumeLayout(false);
@@ -396,7 +395,7 @@
 		private System.Windows.Forms.Label MidiInputLabel;
 		private System.Windows.Forms.ComboBox SettingMidiInput;
 		private System.Windows.Forms.Button SignatureFolder;
-		private System.Windows.Forms.CheckBox sigCheckbox;
+		private System.Windows.Forms.CheckBox midibardCheckbox;
 		private System.Windows.Forms.CheckBox ForcePlayback;
 		private System.Windows.Forms.TableLayoutPanel SettingsTable;
 		private System.Windows.Forms.CheckBox UnequipPause;

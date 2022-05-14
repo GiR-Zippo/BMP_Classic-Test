@@ -82,7 +82,7 @@ namespace FFBardMusicPlayer.Controls {
 			ForcePlayback.Checked = BmpPigeonhole.Instance.ForcePlayback;
 			UnequipPause.Checked = BmpPigeonhole.Instance.UnequipPause;
 			verboseToggle.Checked = BmpPigeonhole.Instance.Verbose;
-			sigCheckbox.Checked = BmpPigeonhole.Instance.SigIgnore;
+			midibardCheckbox.Checked = BmpPigeonhole.Instance.MidiBardCompatMode;
 			SettingHoldNotes.Checked = BmpPigeonhole.Instance.HoldNotes;
 			AutostartMethod.SelectedIndex = BmpPigeonhole.Instance.AutostartMethod;
 		}
@@ -171,9 +171,9 @@ namespace FFBardMusicPlayer.Controls {
 			BmpPigeonhole.Instance.SaveChatLog = SettingChatSave.Checked;
         }
 
-        private void sigCheckbox_CheckedChanged(object sender, EventArgs e)
+        private void midibardCheckbox_CheckedChanged(object sender, EventArgs e)
         {
-            BmpPigeonhole.Instance.SigIgnore = sigCheckbox.Checked;
+            BmpPigeonhole.Instance.MidiBardCompatMode = midibardCheckbox.Checked;
         }
 
         private void UnequipPause_CheckedChanged(object sender, EventArgs e)
