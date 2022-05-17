@@ -227,10 +227,8 @@ namespace FFBardMusicPlayer.Components {
 			string dir = BmpPigeonhole.Instance.SongDirectory;
 			if(Directory.Exists(dir))
 			{
-				foreach(string file in Directory.EnumerateFiles(dir, "*.m*", SearchOption.AllDirectories).Where(s => s.ToLower().EndsWith(".mid")).AsParallel()) {
-					fileNames.Add(file);
-				}
-				foreach (string file in Directory.EnumerateFiles(dir, "*.m*", SearchOption.AllDirectories).Where(s => s.ToLower().EndsWith(".mmsong")).AsParallel())
+				string[] formats = { ".mid", ".mmsong" };
+				foreach (var file in Directory.EnumerateFiles(dir, "*.*", SearchOption.AllDirectories).Where(x => formats.Any(x.EndsWith)))
 				{
 					fileNames.Add(file);
 				}
@@ -254,7 +252,7 @@ namespace FFBardMusicPlayer.Components {
 				{
 					if(filenameFilter.ToLower().EndsWith(".mid") || filenameFilter.ToLower().EndsWith(".mmsong"))
 					{
-						Parallel.ForEach(this.Items.Cast<MidiFile>().ToList(), file =>
+						foreach (var file in this.Items.Cast<MidiFile>().ToList())
 						{
 							if (file.Enabled)
 							{
@@ -264,7 +262,7 @@ namespace FFBardMusicPlayer.Components {
 									return;
 								}
 							}
-						});
+						};
 					}
 				}
 			}

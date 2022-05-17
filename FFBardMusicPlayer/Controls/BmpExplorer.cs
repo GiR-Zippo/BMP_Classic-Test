@@ -178,7 +178,7 @@ namespace FFBardMusicPlayer.Controls {
 		public bool SelectFile(string file) {
 			bool sel = SongBrowser.SelectFile(file);
 			if(!sel) {
-				SongBrowser.ClearSelected();
+				this.Invoke(t => t.SongBrowser.ClearSelected()); //make it thread safe
 			}
 			return sel;
 		}
