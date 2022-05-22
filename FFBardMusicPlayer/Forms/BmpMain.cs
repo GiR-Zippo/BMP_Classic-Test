@@ -30,6 +30,8 @@ namespace FFBardMusicPlayer.Forms {
 
 		private bool proceedPlaylistMidi = false;
 
+		private System.Timers.Timer _performanceStartDelayTimer = null!;
+
 		public bool DonationStatus {
 			set {
 				if(value) {
@@ -45,6 +47,11 @@ namespace FFBardMusicPlayer.Forms {
 		public BmpMain(string title, string messageText)
 		{
 			InitializeComponent();
+
+			//init the delay timer
+			_performanceStartDelayTimer = new System.Timers.Timer();
+			_performanceStartDelayTimer.Enabled = false;
+            _performanceStartDelayTimer.Elapsed += StartDelayTimer_Elapsed; ;
 
 			this.UpdatePerformance();
 
@@ -221,7 +228,13 @@ namespace FFBardMusicPlayer.Forms {
 			Log("Bard Music Player initialized.");
 		}
 
-		private void Instance_InstrumentHeldChanged(BardMusicPlayer.Seer.Events.InstrumentHeldChanged seerEvent)
+        private void StartDelayTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+			_performanceStartDelayTimer.Enabled = false;
+			Player.Player.Play();
+		}
+
+        private void Instance_InstrumentHeldChanged(BardMusicPlayer.Seer.Events.InstrumentHeldChanged seerEvent)
         {
 			if (LocalOrchestra.OrchestraEnabled)
 			{
@@ -425,8 +438,11 @@ namespace FFBardMusicPlayer.Forms {
 						item.Line.Contains("The count-in will now commence.") ||
 						item.Line.Contains("orchestre est pr"))
 					{
-						Thread.Sleep(3000);
-                        Player.Player.Play();
+						if (_performanceStartDelayTimer.Enabled)
+							return;
+
+						_performanceStartDelayTimer.Interval = 3000;
+						_performanceStartDelayTimer.Enabled = true;
                     }
                 }
             }
@@ -443,12 +459,14 @@ namespace FFBardMusicPlayer.Forms {
 			if (BmpPigeonhole.Instance.AutostartMethod != 2)
 				return;
 
-			if (BmpPigeonhole.Instance.MidiBardCompatMode)
-				Thread.Sleep(2500 + 3405);
-			else
-				Thread.Sleep(2500);
+			if (_performanceStartDelayTimer.Enabled)
+				return;
 
-			Player.Player.Play();
+			if (BmpPigeonhole.Instance.MidiBardCompatMode)
+				_performanceStartDelayTimer.Interval = (2500 + 3405);
+			else
+				_performanceStartDelayTimer.Interval = 2500;
+			_performanceStartDelayTimer.Enabled = true;
 		}
 
 		private void Memory_OnPerformanceReadyChanged(bool performance)

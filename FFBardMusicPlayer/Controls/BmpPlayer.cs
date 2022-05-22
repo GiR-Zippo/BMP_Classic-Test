@@ -307,7 +307,6 @@ namespace FFBardMusicPlayer.Controls {
 		}
 
 		// Generic funcs
-
 		public void LoadFile(string filename, int track) {
 			if(!string.IsNullOrEmpty(filename)) {
 				player.Load(filename, track);
