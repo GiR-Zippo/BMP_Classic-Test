@@ -13,5 +13,10 @@ namespace FFBardMusicPlayer
         /// Set or gets the current game
         /// </summary>
         public static Game CurrentGame { get; set; }
+        /// <summary>
+        /// Set or gets the current game
+        /// </summary>
+        public static bool MetronomeTriggered { get; set; } = false;
+
     }
 }

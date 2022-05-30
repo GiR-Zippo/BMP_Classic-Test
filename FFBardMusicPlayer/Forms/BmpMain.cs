@@ -51,7 +51,7 @@ namespace FFBardMusicPlayer.Forms {
 			//init the delay timer
 			_performanceStartDelayTimer = new System.Timers.Timer();
 			_performanceStartDelayTimer.Enabled = false;
-            _performanceStartDelayTimer.Elapsed += StartDelayTimer_Elapsed; ;
+            _performanceStartDelayTimer.Elapsed += StartDelayTimer_Elapsed;
 
 			this.UpdatePerformance();
 
@@ -459,14 +459,22 @@ namespace FFBardMusicPlayer.Forms {
 			if (BmpPigeonhole.Instance.AutostartMethod != 2)
 				return;
 
-			if (_performanceStartDelayTimer.Enabled)
-				return;
+			BmpGlobals.MetronomeTriggered = true;
 
+			int delay = 2500;
 			if (BmpPigeonhole.Instance.MidiBardCompatMode)
-				_performanceStartDelayTimer.Interval = (2500 + 3405);
-			else
-				_performanceStartDelayTimer.Interval = 2500;
+				delay = (2500 + 3405);
+
+			if (!LocalOrchestra.OrchestraEnabled)
+			{
+				if (_performanceStartDelayTimer.Enabled)
+					return;
+			}
+			_performanceStartDelayTimer.Interval = delay;
 			_performanceStartDelayTimer.Enabled = true;
+
+			if (LocalOrchestra.OrchestraEnabled)
+				LocalOrchestra.PerformerPlay(seerEvent.Game, delay);
 		}
 
 		private void Memory_OnPerformanceReadyChanged(bool performance)

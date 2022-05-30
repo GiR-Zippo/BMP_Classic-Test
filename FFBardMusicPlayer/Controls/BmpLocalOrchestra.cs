@@ -99,10 +99,15 @@ namespace FFBardMusicPlayer.Controls {
 			LocalOrchestraHandler.Instance.PerformerProgress(prog);
 		}
 
-		public void PerformerPlay(bool play)
-		{
+		public void PerformerPlay(bool play) {
 			LocalOrchestraHandler.Instance.PerformerPlay(play);
 		}
+
+		public void PerformerPlay(Game game, int delay)
+		{
+			LocalOrchestraHandler.Instance.PerformerPlay(game, delay);
+		}
+
 		public void PerformerStop() {
 			LocalOrchestraHandler.Instance.PerformerStop();
 		}

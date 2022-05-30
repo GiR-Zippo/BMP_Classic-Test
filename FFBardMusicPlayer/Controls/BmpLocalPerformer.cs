@@ -24,6 +24,7 @@ namespace FFBardMusicPlayer.Controls {
 		private FFXIVKeybindDat hotkeys = new FFXIVKeybindDat();
 		private FFXIVHotbarDat hotbar = new FFXIVHotbarDat();
 		private FFXIVHook hook = new FFXIVHook();
+		private Timer performanceStartDelayTimer = null!;
 
 		private Instrument chosenInstrument = Instrument.Piano;
 		public Instrument ChosenInstrument {
@@ -124,6 +125,9 @@ namespace FFBardMusicPlayer.Controls {
 		public BmpLocalPerformer(MultiboxProcess mp)
 		{
 			InitializeComponent();
+			performanceStartDelayTimer = new Timer();
+			performanceStartDelayTimer.Enabled = false;
+            performanceStartDelayTimer.Elapsed += PerformanceStartDelayTimer_Elapsed;
 
 			this.ChosenInstrument = this.chosenInstrument;
 
@@ -143,9 +147,12 @@ namespace FFBardMusicPlayer.Controls {
 			};
 		}
 
-		public BmpLocalPerformer(Game arg)
+        public BmpLocalPerformer(Game arg)
 		{
 			InitializeComponent();
+			performanceStartDelayTimer = new Timer();
+			performanceStartDelayTimer.Enabled = false;
+			performanceStartDelayTimer.Elapsed += PerformanceStartDelayTimer_Elapsed;
 
 			this.ChosenInstrument = this.chosenInstrument;
 
@@ -270,7 +277,20 @@ namespace FFBardMusicPlayer.Controls {
 			}
 		}
 
-		public void Play(bool play) {
+		private void PerformanceStartDelayTimer_Elapsed(object sender, ElapsedEventArgs e)
+		{
+			Play(true);
+			performanceStartDelayTimer.Enabled = false;
+		}
+
+		public void Play(int delay)
+		{
+			performanceStartDelayTimer.Interval = delay;
+			performanceStartDelayTimer.Enabled = true;
+        }
+
+		public void Play(bool play)
+		{
 			if(sequencer is BmpSequencer) {
 				Scroller.Text = sequencer.Position.ToString();
 				if(play) {

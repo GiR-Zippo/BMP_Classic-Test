@@ -127,6 +127,14 @@ namespace FFBardMusicPlayer.MidiAndSequencing
                     performer.Play(play);
         }
 
+        public void PerformerPlay(Game game, int delay)
+        {
+            var g = _performers.Find(p => p.game.Pid == game.Pid);
+            if (g == null)
+                return;
+            g.Play(delay);
+        }
+
         public void PerformerStop()
         {
             foreach (var performer in _performers)

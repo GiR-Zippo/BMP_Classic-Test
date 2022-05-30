@@ -23,6 +23,7 @@ namespace FFBardMusicPlayer.Forms
 					_performanceStartDelayTimer.Enabled = false;
 
 				ChatLogAll.AppendRtf(BmpChatParser.FormatRtf("Playback paused."));
+				BmpGlobals.MetronomeTriggered = false;
 				if (LocalOrchestra.OrchestraEnabled)
 					LocalOrchestra.PerformerPlay(false);
 
@@ -34,7 +35,7 @@ namespace FFBardMusicPlayer.Forms
 					_performanceStartDelayTimer.Enabled = false;
 
 				ChatLogAll.AppendRtf(BmpChatParser.FormatRtf("Playback resumed."));
-				if (LocalOrchestra.OrchestraEnabled)
+				if (LocalOrchestra.OrchestraEnabled && !BmpGlobals.MetronomeTriggered)
 					LocalOrchestra.PerformerPlay(true);
 
 				Statistics.Restart();
