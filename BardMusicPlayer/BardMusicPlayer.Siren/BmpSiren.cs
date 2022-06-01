@@ -68,7 +68,9 @@ namespace BardMusicPlayer.Siren
         /// <param name="x"></param>
         public int GetVolume()
         {
-            return (int)(_mdev.AudioSessionManager.AudioSessionControl.SimpleAudioVolume.Volume * 100);
+            if (_player == null) 
+                return 0;
+            return (int)(_mdev.AudioSessionManager.AudioSessionControl.SimpleAudioVolume.Volume * 100);            
         }
 
         /// <summary>
@@ -77,6 +79,7 @@ namespace BardMusicPlayer.Siren
         /// <param name="x"></param>
         public void SetVolume(float x)
         {
+            if (_player == null) return;
             _mdev.AudioSessionManager.AudioSessionControl.SimpleAudioVolume.Volume = x / 100;
         }
 
@@ -101,8 +104,14 @@ namespace BardMusicPlayer.Siren
         /// <param name="latency"></param>
         public void Setup(float defaultVolume = 0.8f, byte bufferCount = 2, byte latency = 100)
         {
-            var mmAudio = new MMDeviceEnumerator().GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
-            Setup(mmAudio, defaultVolume, bufferCount, latency);
+            try{
+                var mmAudio = new MMDeviceEnumerator().GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
+                Setup(mmAudio, defaultVolume, bufferCount, latency);
+            }
+            catch{
+                _player = null;
+                return;
+            }
         }
 
         /// <summary>

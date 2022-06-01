@@ -25,7 +25,7 @@ namespace FFBardMusicPlayer {
 		[STAThread]
         static void Main(string[] args)
         {
-            string titleVersion = "BardMusicPlayer 1.5.7 - BoL Version";
+            string titleVersion = "BardMusicPlayer 1.5.8 - BoL Version";
             string messageText = "      This is an unsupported version of BardMusicPlayer";
 
 			Application.EnableVisualStyles();
