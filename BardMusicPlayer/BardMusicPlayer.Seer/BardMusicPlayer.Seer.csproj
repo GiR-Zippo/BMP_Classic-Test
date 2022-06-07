@@ -49,10 +49,19 @@
     <Reference Include="Machina.FFXIV">
       <HintPath>Lib\Machina\Machina.FFXIV.dll</HintPath>
     </Reference>
+	<Reference Include="Machina.FFXIV.Oodle">
+      <HintPath>Lib\Machina\Machina.FFXIV.Oodle.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
-
+  <ItemGroup>
+    <ContentWithTargetPath Include="Lib\Machina\\oo2net_9_win64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>oo2net_9_win64.dll</TargetPath>
+    </ContentWithTargetPath>
+  </ItemGroup>
+	
   <ItemGroup>
     <Compile Update="Reader\Backend\Sharlayan\Files\Signatures\Signatures.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -75,6 +84,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Structures.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Lib\Machina\oo2net_9_win64.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

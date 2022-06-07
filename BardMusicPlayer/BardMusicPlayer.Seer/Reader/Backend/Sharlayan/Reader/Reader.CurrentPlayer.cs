@@ -20,7 +20,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Reader
 
             if (!CanGetPlayerInfo() || !MemoryHandler.IsAttached) return result;
 
-            var playerInfoMap = (IntPtr)Scanner.Locations[Signatures.PlayerInformationKey];
+            var playerInfoMap = (IntPtr) Scanner.Locations[Signatures.PlayerInformationKey];
 
             if (playerInfoMap.ToInt64() <= 6496) return result;
 
