@@ -11,9 +11,10 @@ using System.Threading.Tasks;
 using BardMusicPlayer.Quotidian;
 using BardMusicPlayer.Quotidian.Structs;
 using BardMusicPlayer.Seer.Events;
-using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Core.Enums;
+using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Core;
 using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Events;
 using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Models;
+using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Models.ReadResults;
 using BardMusicPlayer.Seer.Reader.Backend.Sharlayan.Utilities;
 
 namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
@@ -21,14 +22,16 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
     internal class SharlayanReaderBackend : IReaderBackend
     {
         public EventSource ReaderBackendType { get; }
+
         public ReaderHandler ReaderHandler { get; set; }
 
         public int SleepTimeInMs { get; set; }
+
         public SharlayanReaderBackend(int sleepTimeInMs)
         {
             ReaderBackendType = EventSource.Sharlayan;
-            SleepTimeInMs = sleepTimeInMs;
-            _signaturesFound = false;
+            SleepTimeInMs     = sleepTimeInMs;
+            _signaturesFound  = false;
         }
 
         private Reader.Reader _reader;
@@ -38,53 +41,133 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
         {
             _lastScan = new ScanItems
             {
-                FirstScan = true,
+                FirstScan          = true,
                 PreviousArrayIndex = 0,
-                PreviousOffset = 0,
-                ActorId = 0,
-                ConfigId = "",
-                Instrument = Instrument.None,
-                PlayerName = "Unknown",
-                IsBard = true,
-                IsLoggedIn = true,
-                World = "",
-                PartyMembers = new SortedDictionary<uint, string>(),
-                ChatOpen = false
+                PreviousOffset     = 0,
+                ActorId            = 0,
+                ConfigId           = "",
+                Instrument         = Instrument.None,
+                PlayerName         = "Unknown",
+                IsBard             = true,
+                World              = "",
+                PartyMembers       = new SortedDictionary<uint, string>(),
+                ChatOpen           = false
             };
             _reader ??= new Reader.Reader(new MemoryHandler(new Scanner(), ReaderHandler.Game.GameRegion));
-            _reader.MemoryHandler.SetProcess(new ProcessModel {Process = ReaderHandler.Game.Process});
+            _reader.MemoryHandler.SetProcess(new ProcessModel { Process = ReaderHandler.Game.Process });
             _reader.MemoryHandler.SignaturesFoundEvent += SignaturesFound;
-            _reader.MemoryHandler.ExceptionEvent += ExceptionEvent;
+            _reader.MemoryHandler.ExceptionEvent       += ExceptionEvent;
         }
 
         private void DestroySharlayan()
         {
-            try { if (_reader!=null) _reader.MemoryHandler.SignaturesFoundEvent -= SignaturesFound; } catch { }
-            try { if (_reader!=null) _reader.MemoryHandler.ExceptionEvent -= ExceptionEvent; } catch { }
-            try { _reader?.MemoryHandler.UnsetProcess(); } catch { }
-            try { if (_reader!=null) _reader.Scanner = null; } catch { }
-            try { if (_reader!=null) _reader.MemoryHandler = null;  } catch { }
-            _reader = null;
+            try
+            {
+                if (_reader != null) _reader.MemoryHandler.SignaturesFoundEvent -= SignaturesFound;
+            }
+            catch
+            {
+            }
+
+            try
+            {
+                if (_reader != null) _reader.MemoryHandler.ExceptionEvent -= ExceptionEvent;
+            }
+            catch
+            {
+            }
+
+            try
+            {
+                _reader?.MemoryHandler.UnsetProcess();
+            }
+            catch
+            {
+            }
+
+            try
+            {
+                if (_reader != null) _reader.Scanner = null;
+            }
+            catch
+            {
+            }
+
+            try
+            {
+                if (_reader != null) _reader.MemoryHandler = null;
+            }
+            catch
+            {
+            }
+
+            _reader          = null;
             _signaturesFound = false;
-            _lastScan = default;
+            _lastScan        = default;
         }
 
         private void SignaturesFound(object sender, SignaturesFoundEvent signaturesFoundEvent)
         {
-            if (!signaturesFoundEvent.Signatures.Keys.Contains("CHATLOG")) ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Sharlayan, new BmpSeerSharlayanSigException("CHATLOG")));
-            if (!signaturesFoundEvent.Signatures.Keys.Contains("CHATINPUT")) ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Sharlayan, new BmpSeerSharlayanSigException("CHATINPUT")));
-            if (!signaturesFoundEvent.Signatures.Keys.Contains("WORLD")) ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Sharlayan, new BmpSeerSharlayanSigException("WORLD")));
-            if (!signaturesFoundEvent.Signatures.Keys.Contains("CHARID")) ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Sharlayan, new BmpSeerSharlayanSigException("CHARID")));
-            if (!signaturesFoundEvent.Signatures.Keys.Contains("PERFSTATUS")) ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Sharlayan, new BmpSeerSharlayanSigException("PERFSTATUS")));
-            if (!signaturesFoundEvent.Signatures.Keys.Contains("PLAYERINFO")) ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Sharlayan, new BmpSeerSharlayanSigException("PLAYERINFO")));
-            if (!signaturesFoundEvent.Signatures.Keys.Contains("PARTYMAP")) ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Sharlayan, new BmpSeerSharlayanSigException("PARTYMAP")));
-            if (!signaturesFoundEvent.Signatures.Keys.Contains("PARTYCOUNT")) ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Sharlayan, new BmpSeerSharlayanSigException("PARTYCOUNT")));
-            if (!signaturesFoundEvent.Signatures.Keys.Contains("CHARMAP")) ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Sharlayan, new BmpSeerSharlayanSigException("CHARMAP")));
-            _signaturesFound = true;
+            if (!signaturesFoundEvent.Signatures.Keys.Contains("CHATLOG"))
+            {
+                ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Sharlayan,
+                    new BmpSeerSharlayanSigException("CHATLOG")));
+            }
+
+            if (!signaturesFoundEvent.Signatures.Keys.Contains("CHATINPUT"))
+            {
+                ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Sharlayan,
+                    new BmpSeerSharlayanSigException("CHATINPUT")));
+            }
+
+            if (!signaturesFoundEvent.Signatures.Keys.Contains("WORLD"))
+            {
+                ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Sharlayan,
+                    new BmpSeerSharlayanSigException("WORLD")));
+            }
+
+            if (!signaturesFoundEvent.Signatures.Keys.Contains("CHARID"))
+            {
+                ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Sharlayan,
+                    new BmpSeerSharlayanSigException("CHARID")));
+            }
+
+            if (!signaturesFoundEvent.Signatures.Keys.Contains("PERFSTATUS"))
+            {
+                ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Sharlayan,
+                    new BmpSeerSharlayanSigException("PERFSTATUS")));
+            }
+
+            if (!signaturesFoundEvent.Signatures.Keys.Contains("PLAYERINFO"))
+            {
+                ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Sharlayan,
+                    new BmpSeerSharlayanSigException("PLAYERINFO")));
+            }
+
+            if (!signaturesFoundEvent.Signatures.Keys.Contains("PARTYMAP"))
+            {
+                ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Sharlayan,
+                    new BmpSeerSharlayanSigException("PARTYMAP")));
+            }
+
+            if (!signaturesFoundEvent.Signatures.Keys.Contains("PARTYCOUNT"))
+            {
+                ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Sharlayan,
+                    new BmpSeerSharlayanSigException("PARTYCOUNT")));
+            }
+
+            if (!signaturesFoundEvent.Signatures.Keys.Contains("CHARMAP"))
+            {
+                ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Sharlayan,
+                    new BmpSeerSharlayanSigException("CHARMAP")));
+            }
+
+            _signaturesFound                           =  true;
             _reader.MemoryHandler.SignaturesFoundEvent -= SignaturesFound;
         }
 
-        private void ExceptionEvent(object sender, ExceptionEvent exceptionEvent) => ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Sharlayan, exceptionEvent.Exception));
+        private void ExceptionEvent(object sender, ExceptionEvent exceptionEvent) =>
+            ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Sharlayan, exceptionEvent.Exception));
 
         private ScanItems _lastScan;
 
@@ -117,7 +200,7 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
                         await Task.Delay(SleepTimeInMs, token);
                         continue;
                     }
-                    
+
                     GetPlayerInfo(token);
                     GetWorld(token);
                     GetConfigId(token);
@@ -128,7 +211,8 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
                     GetEnsembleEvents(token);
 
                     _lastScan.FirstScan = false;
-                } catch (Exception ex)
+                }
+                catch (Exception ex)
                 {
                     ReaderHandler.Game.PublishEvent(new BackendExceptionEvent(EventSource.Sharlayan, ex));
                 }
@@ -151,10 +235,13 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
                 return;
 
             if (!_reader.CanGetChatLog()) return;
+
             var result = _reader.GetChatLog(_lastScan.PreviousArrayIndex, _lastScan.PreviousOffset);
             _lastScan.PreviousArrayIndex = result.PreviousArrayIndex;
-            _lastScan.PreviousOffset = result.PreviousOffset;
-            foreach (var ensembleFlag in from item in result.ChatLogItems where item.Code.Equals("0039") || item.Code.Equals("003C") select EnsembleMessageLookup.GetEnsembleFlag(item.Line))
+            _lastScan.PreviousOffset     = result.PreviousOffset;
+            foreach (var ensembleFlag in from item in result.ChatLogItems
+                where item.Code.Equals("0039") || item.Code.Equals("003C")
+                select EnsembleMessageLookup.GetEnsembleFlag(item.Line))
             {
                 if (cancellationToken.IsCancellationRequested)
                     return;
@@ -164,9 +251,9 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
                     case EnsembleMessageLookup.EnsembleFlag.Request:
                         ReaderHandler.Game.PublishEvent(new EnsembleRequested(EventSource.Sharlayan));
                         break;
-                    case EnsembleMessageLookup.EnsembleFlag.Start:
+                    /*case EnsembleMessageLookup.EnsembleFlag.Start:
                         ReaderHandler.Game.PublishEvent(new EnsembleStarted(EventSource.Sharlayan));
-                        break;
+                        break;*/
                     case EnsembleMessageLookup.EnsembleFlag.Stop:
                         ReaderHandler.Game.PublishEvent(new EnsembleStopped(EventSource.Sharlayan));
                         break;
@@ -187,11 +274,14 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
                 return;
 
             if (!_reader.CanGetPlayerInfo()) return;
+
             var kvp = _reader.GetCurrentPlayer();
-            if (!_lastScan.FirstScan && _lastScan.ActorId.Equals(kvp.Key) && _lastScan.IsBard.Equals(kvp.Value.Item2)) return;
-            _lastScan.ActorId = kvp.Key;
+            if (!_lastScan.FirstScan && _lastScan.ActorId.Equals(kvp.Key) &&
+                _lastScan.IsBard.Equals(kvp.Value.Item2)) return;
+
+            _lastScan.ActorId    = kvp.Key;
             _lastScan.PlayerName = kvp.Value.Item1;
-            _lastScan.IsBard = kvp.Value.Item2;
+            _lastScan.IsBard     = kvp.Value.Item2;
             _lastScan.IsLoggedIn = kvp.Value.Item3;
             ReaderHandler.Game.PublishEvent(new ActorIdChanged(EventSource.Sharlayan, _lastScan.ActorId));
             ReaderHandler.Game.PublishEvent(new PlayerNameChanged(EventSource.Sharlayan, _lastScan.PlayerName));
@@ -205,8 +295,10 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
                 return;
 
             if (!_reader.CanGetCharacterId()) return;
+
             var configId = _reader.GetCharacterId();
             if (!_lastScan.FirstScan && _lastScan.ConfigId.Equals(configId)) return;
+
             _lastScan.ConfigId = configId;
             ReaderHandler.Game.PublishEvent(new ConfigIdChanged(EventSource.Sharlayan, configId));
         }
@@ -217,8 +309,10 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
                 return;
 
             if (!_reader.CanGetWorld()) return;
+
             var world = _reader.GetWorld();
             if (!_lastScan.FirstScan && _lastScan.World.Equals(world)) return;
+
             _lastScan.World = world;
             ReaderHandler.Game.PublishEvent(new HomeWorldChanged(EventSource.Sharlayan, world));
         }
@@ -229,8 +323,10 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
                 return;
 
             if (!_reader.CanGetPerformance()) return;
+
             var instrument = _reader.GetPerformance();
             if (!_lastScan.FirstScan && _lastScan.Instrument.Equals(instrument)) return;
+
             _lastScan.Instrument = instrument;
             ReaderHandler.Game.PublishEvent(new InstrumentHeldChanged(EventSource.Sharlayan, instrument));
         }
@@ -241,8 +337,10 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
                 return;
 
             if (!_reader.CanGetPartyMembers()) return;
+
             var partyResult = _reader.GetPartyMembers();
             if (!_lastScan.FirstScan && partyResult.KeysEquals(_lastScan.PartyMembers)) return;
+
             _lastScan.PartyMembers = partyResult;
             ReaderHandler.Game.PublishEvent(new PartyMembersChanged(EventSource.Sharlayan, _lastScan.PartyMembers));
         }
@@ -253,8 +351,10 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
                 return;
 
             if (!_reader.CanGetChatInput()) return;
+
             var result = _reader.IsChatInputOpen();
             if (!_lastScan.FirstScan && _lastScan.ChatOpen.Equals(result)) return;
+
             _lastScan.ChatOpen = result;
             ReaderHandler.Game.PublishEvent(new ChatStatusChanged(EventSource.Sharlayan, result));
         }
@@ -266,11 +366,12 @@ namespace BardMusicPlayer.Seer.Reader.Backend.Sharlayan
 
             if (!_reader.CanGetChatLog()) return;
 
-            Models.ReadResults.ChatLogResult readResult = _reader.GetChatLog(_lastScan.PreviousArrayIndex, _lastScan.PreviousOffset);
+            ChatLogResult readResult = _reader.GetChatLog(_lastScan.PreviousArrayIndex, _lastScan.PreviousOffset);
             _lastScan.PreviousArrayIndex = readResult.PreviousArrayIndex;
             _lastScan.PreviousOffset = readResult.PreviousOffset;
-            foreach (Core.ChatLogItem item in readResult.ChatLogItems)
-                ReaderHandler.Game.PublishEvent(new ChatLog(EventSource.Sharlayan, item));
+            foreach (ChatLogItem item in readResult.ChatLogItems)
+                ReaderHandler.Game.PublishEvent(new ChatLog(EventSource.Sharlayan, ReaderHandler.Game, item));
         }
+
     }
 }

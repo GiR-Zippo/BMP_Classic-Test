@@ -432,11 +432,11 @@ namespace FFBardMusicPlayer.Forms {
 	
 			if (BmpPigeonhole.Instance.AutostartMethod == 1)
             {
-				if (item.Code == "0039")
+				if (item.ChatLogCode == "0039")
 				{
-					if (item.Line.Contains(@"Anzählen beginnt") ||
-						item.Line.Contains("The count-in will now commence.") ||
-						item.Line.Contains("orchestre est pr"))
+					if (item.ChatLogLine.Contains(@"Anzählen beginnt") ||
+						item.ChatLogLine.Contains("The count-in will now commence.") ||
+						item.ChatLogLine.Contains("orchestre est pr"))
 					{
 						if (_performanceStartDelayTimer.Enabled)
 							return;

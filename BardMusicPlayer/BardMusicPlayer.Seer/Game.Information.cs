@@ -21,10 +21,10 @@ namespace BardMusicPlayer.Seer
     {
         private void InitInformation()
         {
-            GamePath = GetGamePath();
+            GamePath        = GetGamePath();
             EnvironmentType = GetEnvironmentType();
-            GameRegion = GetGameRegion();
-            ConfigPath = GetConfigPath();
+            GameRegion      = GetGameRegion();
+            ConfigPath      = GetConfigPath();
         }
 
         /// <summary>
@@ -96,6 +96,11 @@ namespace BardMusicPlayer.Seer
         /// Returns false if we know the player is not a bard.
         /// </summary>
         public bool IsBard { get; private set; } = true;
+
+        /// <summary>
+        /// Test
+        /// </summary>
+        public long ServerLatency { get; private set; } = 0;
 
         /// <summary>
         /// Contains nearby partymember list. Updated by Sharlayan & Machina. Currently only Sharlayan updates during logoff.
@@ -186,9 +191,9 @@ namespace BardMusicPlayer.Seer
                 var environmentType = modules.Cast<ProcessModule>()
                     .Aggregate(EnvironmentType.Normal, (current, module) => module.ModuleName.ToLower() switch
                     {
-                        "sbiedll.dll" => EnvironmentType.Sandboxie,
+                        "sbiedll.dll"    => EnvironmentType.Sandboxie,
                         "innerspace.dll" => EnvironmentType.InnerSpace,
-                        _ => current
+                        _                => current
                     });
                 return environmentType;
             }
@@ -207,7 +212,7 @@ namespace BardMusicPlayer.Seer
                 var gameRegion = GameRegion.Global;
 
                 if (File.Exists(GamePath + @"boot\locales\ko.pak")) gameRegion = GameRegion.Korea;
-                else if (Directory.Exists(GamePath + @"sdo")) gameRegion = GameRegion.China;
+                else if (Directory.Exists(GamePath + @"sdo")) gameRegion       = GameRegion.China;
 
                 return gameRegion;
             }

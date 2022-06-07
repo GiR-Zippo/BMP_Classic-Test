@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright(c) 2021 MoogleTroupe, trotlinebeercan
  * Licensed under the GPL v3 license. See https://github.com/BardMusicPlayer/BardMusicPlayer/blob/develop/LICENSE for full license information.
  */
@@ -37,7 +37,7 @@ namespace BardMusicPlayer.Seer
 
         internal Game(Process process)
         {
-            _uuid = Guid.NewGuid().ToString();
+            _uuid   = Guid.NewGuid().ToString();
             Process = process;
         }
 
@@ -55,13 +55,13 @@ namespace BardMusicPlayer.Seer
                 Pid = Process.Id;
                 InitInformation();
 
-                _eventDedupeHistory = new Dictionary<Type, long>();
+                _eventDedupeHistory     = new Dictionary<Type, long>();
                 _eventQueueHighPriority = new ConcurrentQueue<SeerEvent>();
-                _eventQueueLowPriority = new ConcurrentQueue<SeerEvent>();
-                _eventQueueOpen = true;
+                _eventQueueLowPriority  = new ConcurrentQueue<SeerEvent>();
+                _eventQueueOpen         = true;
 
-                DatReader = new ReaderHandler(this, new DatFileReaderBackend(1));
-                MemoryReader = new ReaderHandler(this, new SharlayanReaderBackend(1));
+                DatReader     = new ReaderHandler(this, new DatFileReaderBackend(1));
+                MemoryReader  = new ReaderHandler(this, new SharlayanReaderBackend(1));
                 NetworkReader = new ReaderHandler(this, new MachinaReaderBackend(1));
 
                 _eventTokenSource = new CancellationTokenSource();
@@ -127,7 +127,7 @@ namespace BardMusicPlayer.Seer
 
             _eventQueueOpen = false;
             try
-            {
+            { 
                 if (_eventTokenSource != null)
                     _eventTokenSource.Cancel();
             }
@@ -194,7 +194,7 @@ namespace BardMusicPlayer.Seer
             if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
 
-            return obj.GetType() == GetType() && Equals((Game)obj);
+            return obj.GetType() == GetType() && Equals((Game) obj);
         }
 
         public bool Equals(Game other)

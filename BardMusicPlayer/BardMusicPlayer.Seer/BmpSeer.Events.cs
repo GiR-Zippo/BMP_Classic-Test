@@ -255,9 +255,6 @@ namespace BardMusicPlayer.Seer
                         case IsBardChanged isBardChanged:
                             OnIsBardChanged(isBardChanged);
                             break;
-                        case IsLoggedInChanged isLoggedInChanged:
-                            OnIsLoggedInChanged(isLoggedInChanged);
-                            break;
                         case KeyMapChanged keyMapChanged:
                             OnKeyMapChanged(keyMapChanged);
                             break;
@@ -270,7 +267,7 @@ namespace BardMusicPlayer.Seer
                     }
                 }
 
-                await Task.Delay(1, token);
+                await Task.Delay(1, token).ContinueWith(tsk=> { });
             }
         }
 

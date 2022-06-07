@@ -10,9 +10,9 @@ namespace FFBardMusicPlayer {
 
 		public static string Fixup(BardMusicPlayer.Seer.Events.ChatLog item) {
 			Regex rgx = new Regex("^([^ ]+ [^:]+):(.+)");
-			string format = rgx.Replace(item.Line, "$1: $2");
+			string format = rgx.Replace(item.ChatLogLine, "$1: $2");
 
-			switch(item.Code) {
+			switch(item.ChatLogCode) {
 				case "000E": { // Party
 					int pid = (int) (format[0] & 0xF) + 1;
 					format = string.Format("[{0}] {1}", pid, format.Substring(1));
@@ -58,7 +58,7 @@ namespace FFBardMusicPlayer {
 				case "0015":
 				case "0016":
 				case "0017": { // LS
-					int ls = int.Parse(item.Code.Substring(3)) + 1;
+					int ls = int.Parse(item.ChatLogCode.Substring(3)) + 1;
 					format = string.Format("[{0}] {1}", ls, format);
 					break;
 				}
@@ -85,11 +85,11 @@ namespace FFBardMusicPlayer {
 		public static string FormatChat(BardMusicPlayer.Seer.Events.ChatLog item) {
 
 			string format = BmpChatParser.Fixup(item);
-			string timestamp = item.ChatTimeStamp.ToShortTimeString();
+			string timestamp = item.ChatLogTimeStamp.ToShortTimeString();
 
 			bool bold = false;
 			Color col = Color.White;
-			switch(item.Code) {
+			switch(item.ChatLogCode) {
 				case "000E": { // Party
 					col = Color.FromArgb(255, 150, 150, 250);
 					break;

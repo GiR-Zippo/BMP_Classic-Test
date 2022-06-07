@@ -57,7 +57,7 @@ namespace BardMusicPlayer.Seer
 
                         // Adding a game spikes the cpu when sharlayan scans memory.
                         var timeNow = Clock.Time.Now;
-                        if (coolDown + BmpPigeonhole.Instance.SeerGameScanCooldown > timeNow)
+                        if (coolDown + BmpPigeonhole.Instance.SeerGameScanCooldown > timeNow) 
                             continue;
 
                         coolDown = timeNow;
@@ -77,7 +77,7 @@ namespace BardMusicPlayer.Seer
                     PublishEvent(new SeerExceptionEvent(ex));
                 }
 
-                await Task.Delay(1, token);
+                await Task.Delay(1, token).ContinueWith(tsk => { });
             }
         }
 

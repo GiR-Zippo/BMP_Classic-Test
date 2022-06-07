@@ -6,7 +6,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Machina;
 using Machina.FFXIV;
 using Machina.Infrastructure;
 
@@ -17,26 +16,28 @@ namespace BardMusicPlayer.Seer.Utilities
         internal static MachinaManager Instance => LazyInstance.Value;
 
         private static readonly Lazy<MachinaManager> LazyInstance = new(() => new MachinaManager());
+
         private MachinaManager()
         {
             _lock = new object();
+
             Trace.UseGlobalLock = false;
-            Trace.Listeners.Add(new MachinaLogger());  
+            Trace.Listeners.Add(new MachinaLogger());
 
             _monitor = new FFXIVNetworkMonitor
             {
-                MonitorType = NetworkMonitorType.RawSocket,
-                UseRemoteIpFilter = true
+                MonitorType     = NetworkMonitorType.RawSocket
             };
             _monitor.MessageReceivedEventHandler += MessageReceivedEventHandler;
         }
 
-        private static readonly List<int> Lengths = new() { 56, 88, 656, 664, 928, 3576 };
+        private static readonly List<int> Lengths = new() {56, 88, 656, 664, 928, 3576 };
         private readonly FFXIVNetworkMonitor _monitor;
         private readonly object _lock;
         private bool _monitorRunning;
 
         internal delegate void MessageReceivedHandler(int processId, byte[] message);
+
         internal event MessageReceivedHandler MessageReceived;
 
         internal void AddGame(int pid)
@@ -48,6 +49,7 @@ namespace BardMusicPlayer.Seer.Utilities
                     _monitor.Stop();
                     _monitorRunning = false;
                 }
+
                 _monitor.ProcessIDList.Add((uint) pid);
                 _monitor.Start();
                 _monitorRunning = true;
@@ -58,13 +60,15 @@ namespace BardMusicPlayer.Seer.Utilities
         {
             lock (_lock)
             {
-                if (_monitorRunning) 
+                if (_monitorRunning)
                 {
                     _monitor.Stop();
                     _monitorRunning = false;
                 }
+
                 _monitor.ProcessIDList.Remove((uint) pid);
                 if (_monitor.ProcessIDList.Count <= 0) return;
+
                 _monitor.Start();
                 _monitorRunning = true;
             }
@@ -75,15 +79,18 @@ namespace BardMusicPlayer.Seer.Utilities
             if (Lengths.Contains(message.Length)) MessageReceived?.Invoke((int) connection.ProcessId, message);
         }
 
-        ~MachinaManager() => Dispose();
+        ~MachinaManager() { Dispose(); }
+
         public void Dispose()
         {
             lock (_lock)
             {
-                if (_monitorRunning) {
+                if (_monitorRunning)
+                {
                     _monitor.Stop();
                     _monitorRunning = false;
                 }
+
                 _monitor.ProcessIDList.Clear();
                 _monitor.MessageReceivedEventHandler -= MessageReceivedEventHandler;
             }

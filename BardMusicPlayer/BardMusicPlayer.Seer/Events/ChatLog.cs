@@ -9,18 +9,19 @@ namespace BardMusicPlayer.Seer.Events
 {
     public sealed class ChatLog : SeerEvent
     {
-        internal ChatLog(EventSource readerBackendType, Reader.Backend.Sharlayan.Core.ChatLogItem item) : base(readerBackendType, 0, false)
+        internal ChatLog(EventSource readerBackendType, Game game, Reader.Backend.Sharlayan.Core.ChatLogItem item) : base(readerBackendType, 0, false)
         {
             EventType = GetType();
-            ChatTimeStamp = item.TimeStamp;
-            Code = item.Code;
-            Line = item.Line;
+            ChatLogGame = game;
+            ChatLogTimeStamp = item.TimeStamp;
+            ChatLogCode = item.Code;
+            ChatLogLine = item.Line;
         }
 
-
-        public DateTime ChatTimeStamp{ get; }
-        public string Code { get; }
-        public string Line { get; }
+        public Game ChatLogGame { get; }
+        public DateTime ChatLogTimeStamp { get; }
+        public string ChatLogCode { get; }
+        public string ChatLogLine { get; }
 
         public override bool IsValid() => true;
     }
