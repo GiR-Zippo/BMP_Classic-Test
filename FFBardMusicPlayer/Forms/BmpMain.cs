@@ -107,7 +107,6 @@ namespace FFBardMusicPlayer.Forms {
 				this.Invoke(t => t.GameStopped(e));
 			};
 
-
 			BmpSeer.Instance.ChatLog += delegate (BardMusicPlayer.Seer.Events.ChatLog e) {
 				this.Invoke(t => t.Memory_OnChatReceived(e));
 			};
@@ -421,8 +420,12 @@ namespace FFBardMusicPlayer.Forms {
 
 		private void Memory_OnChatReceived(BardMusicPlayer.Seer.Events.ChatLog item)
 		{
-			string rtf = BmpChatParser.FormatChat(item);
-			ChatLogAll.AppendRtf(rtf);
+			//suppress messages in log from other than the host bard
+			if (item.Game.Pid == BmpGlobals.CurrentGame.Pid)
+			{
+				string rtf = BmpChatParser.FormatChat(item);
+				ChatLogAll.AppendRtf(rtf);
+			}
 
 			if (!WantsAutostartPlaying)
 				return;

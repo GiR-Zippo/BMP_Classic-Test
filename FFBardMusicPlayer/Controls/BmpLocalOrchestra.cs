@@ -52,7 +52,10 @@ namespace FFBardMusicPlayer.Controls {
 
 		public void AddLocalProcesses(Game game, bool hostProcess = false)
 		{
-			PerformerPanel.Controls.Add(LocalOrchestraHandler.Instance.AddLocalPerformer(game, hostProcess));
+			var newPerformer = LocalOrchestraHandler.Instance.AddLocalPerformer(game, hostProcess);
+			if (newPerformer == null)
+				return;
+			PerformerPanel.Controls.Add(newPerformer);
 			updatePanel(false);
 		}
 

@@ -40,6 +40,10 @@ namespace FFBardMusicPlayer.MidiAndSequencing
 
         public BmpLocalPerformer AddLocalPerformer(Game game, bool hostProcess = false)
         {
+            var exists_result = _performers.AsParallel().Where(t => t.game.Pid == game.Pid);
+            if (exists_result.Count() > 0)
+                return null;
+
             BmpLocalPerformer perf = new BmpLocalPerformer(game);
             perf.Dock = DockStyle.Top;
             perf.hostProcess = hostProcess;
@@ -70,6 +74,7 @@ namespace FFBardMusicPlayer.MidiAndSequencing
                 perf.Dock = DockStyle.Top;
                 perf.hostProcess = oldPerformer.hostProcess;
                 perf.TrackNum = oldPerformer.TrackNum;
+                perf.PerformerName = oldPerformer.game.PlayerName;
                 _performers[index] = perf;
             }
         }
@@ -87,6 +92,10 @@ namespace FFBardMusicPlayer.MidiAndSequencing
             int track = 1;
             foreach (MultiboxProcess mp in processes)
             {
+                var exists_result = _performers.AsParallel().Where(t => t.game.Pid == mp.game.Pid);
+                if (exists_result.Count() > 0)
+                    continue;
+
                 BmpLocalPerformer perf = new BmpLocalPerformer(mp);
                 perf.Dock = DockStyle.Top;
 
@@ -96,9 +105,8 @@ namespace FFBardMusicPlayer.MidiAndSequencing
                     _performers.Insert(0, perf);
                 }
                 else
-                {
                     _performers.Add(perf);
-                }
+
                 track++;
             }
         }

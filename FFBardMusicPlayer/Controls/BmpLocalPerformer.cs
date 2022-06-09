@@ -82,6 +82,10 @@ namespace FFBardMusicPlayer.Controls {
 			get {
 				return CharacterName.Text;
 			}
+			set{
+				CharacterName.Invoke(t => t.Text = value);
+
+			}
 		}
 
 		public bool PerformerEnabled {
@@ -131,7 +135,8 @@ namespace FFBardMusicPlayer.Controls {
 
 			this.ChosenInstrument = this.chosenInstrument;
 
-			if(mp != null) {
+			if(mp != null)
+			{
 				hook.Hook(mp.game.Process, false);
 				hotkeys.LoadKeybindDat(mp.characterId);
 				hotbar.LoadHotbarDat(mp.characterId);

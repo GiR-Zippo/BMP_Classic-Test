@@ -27,8 +27,8 @@ namespace FFBardMusicPlayer {
 		public List<MultiboxProcess> multiboxProcesses = new List<MultiboxProcess>();
 		public bool useLocalOrchestra;
 
-		private BackgroundWorker processWorker = new BackgroundWorker();
-		private AutoResetEvent processCancelled = new AutoResetEvent(false);
+		//private BackgroundWorker processWorker = new BackgroundWorker();
+		//private AutoResetEvent processCancelled = new AutoResetEvent(false);
 
 
 		public BmpProcessSelect() {
@@ -36,8 +36,8 @@ namespace FFBardMusicPlayer {
 
 			LocalOrchestraCheck.Visible = false;
 
-			processWorker.DoWork += ButtonLabelTask;
-			processWorker.WorkerSupportsCancellation = true;
+			//processWorker.DoWork += ButtonLabelTask;
+			//processWorker.WorkerSupportsCancellation = true;
 
 			BmpSeer.Instance.GameStarted += delegate (BardMusicPlayer.Seer.Events.GameStarted e) {
 				this.Invoke(t => t.GameStarted(e));
@@ -127,7 +127,7 @@ namespace FFBardMusicPlayer {
 					characterId = id,
 				});
 			}
-			processCancelled.Set();
+			//processCancelled.Set();
 
 			// FIXME enable this after testing
 			LocalOrchestraCheck.Invoke(t => t.Visible = true);
@@ -141,7 +141,7 @@ namespace FFBardMusicPlayer {
 		public void RefreshList(object o, EventArgs a)
 		{
 			ProcessList.Controls.Clear();
-			processWorker.CancelAsync();
+			//processWorker.CancelAsync();
 			if (BmpSeer.Instance.Games.Count == 0)
 			{
 				HeaderText.Text = "No FFXIV processes found.\nMake sure you run with DX11 on.";
@@ -176,24 +176,25 @@ namespace FFBardMusicPlayer {
 					};
 					button.Click += Button_Click;
 					ProcessList.Controls.Add(button);
+					ButtonLabelTask(null, null);
 				}
 
-				CancelProcessWorkerSync();
-				if (!processWorker.IsBusy)
-					processWorker.RunWorkerAsync();
+				//CancelProcessWorkerSync();
+				/*if (!processWorker.IsBusy)
+					processWorker.RunWorkerAsync();*/
 			}
 		}
 
-		public void CancelProcessWorkerSync() {
+		/*public void CancelProcessWorkerSync() {
 			if(processWorker.IsBusy) {
 				processWorker.CancelAsync();
 				processCancelled.WaitOne();
 			}
-		}
+		}*/
 
 		// Button click
 		private void Button_Click(object sender, EventArgs e) {
-			CancelProcessWorkerSync();
+			//CancelProcessWorkerSync();
 			DialogResult = DialogResult.Yes;
 
 			Game game = (sender as Button).Tag as Game;
@@ -227,7 +228,7 @@ namespace FFBardMusicPlayer {
 		}
 
 		private void CancelButton_Click(object sender, EventArgs e) {
-			CancelProcessWorkerSync();
+			//CancelProcessWorkerSync();
 			DialogResult = DialogResult.No;
 		}
 
